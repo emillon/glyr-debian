@@ -1,0 +1,155 @@
+h1. _Glyr_ is a searcheninge for musicrelated metadata
+
+_The finest search you can buy for no money_
+
+It comes both in a commandline interface tool and as a C library, both with an easy to use interface.
+The sort of metadata glyr is searching (and downloading) is usually the data you see in your musicplayer.
+And indeed, originally it was written to serve as internally library for a musicplayer, but has been extended to 
+work as a standalone program which is able to download:
+* cover art
+* lyrics
+* bandphotos
+* artist biography
+* album reviews 
+* tracklists of an album
+* a list of albums from a specific artist.
+* Tags, either related to artist, album or title
+* relations, for example links to wikipedia
+* similar artists 
+* similar songs
+
+*Terminology*:
+To prevent disambiguation the following terms are used below: 	
+* _glyrc_ is the commandline interface to libglyr.
+* _libglyr_ is the library behind, which may be used by your program.
+* a _getter_ is a type of metadata to download, e.g. @cover@, sometimes also called _fetcher_
+* a _provider_ is a source libglyr queries in order to find the data.
+* _glyros_ is the ruby wrapper for this lib.
+
+h2. FEATURES
+
+* Many built-in providers (38 at this time), high success-rate
+* Portable: Windows and Linux are supported (Developement on Linux) see [1] for Mac OSX, 
+* Fuzzy matching: Search providers with Levenshtein algorithm to eliminate typos and enhance search results.
+* Decent Unicode support: All sort of valid UTF8 is taken, and UTf8 output can be forced.
+* Fast Download: libcurl is used internally, and sources are searched in parallel, unneeded data is not downloaded if possible.
+* Lightweight dependencies: libcurl and glib - typical linux systems have those installed.
+* Download of a user defined amount of items, @glyrc cover -a Foo -b Bar -n 30@ loads 30 covers of album 'Bar' by artist 'Foo'.
+* Grouped download: Query providers by descending Accuray / Speed; controllable by the user over the @qsratio@
+* Optional download of images, URL is returned otherwise - so it can act like a search-engine.
+* Free Software licensed under the terms of the GPLv3
+* libglyr is portable, easy, threadsafe and lowlevel enough for everyone.
+* ...lots of other options like min/max size for images.
+
+h2. GETTING STARTED
+
+h3. Compiling
+
+See the "compile page":https://github.com/sahib/glyr/wiki/Compiling.
+
+h3. libglyr:
+
+See the "examples in src/examples":https://github.com/sahib/glyr/wiki for a quickstart.
+There's also a more "gentle (and brief) introduction.":https://github.com/sahib/glyr/wiki/Introduction-to-libglyr
+Also see the "API Reference":http://sahib.github.com/glyr/doc/html/index.html
+Please note: The Api won't be guaranteed to be stable before version 1.0.
+
+h3. glyrc:
+
+Please refer to @glyrc -h@ which gives you a brief introduction to the arguments you can pass,
+See the "wiki":https://github.com/sahib/glyr/wiki/Commandline-arguments for more detailed information about the options.
+
+h2. FAQ
+
+h3. Anyone using it already?
+
+Well, yeah. Me. It's quite fresh and I didn't release it yet.
+But the first plugin is already there: "gmpc-glyros":https://github.com/sahib/gmpc-glyros
+It replaces pretty much every other metadata plugin gmpc. Grab it while it's hot!
+
+h3. Glyr.. such a silly name! Why? 
+
+Indeed. Should have named it 'Glyros'.
+
+h3. Is it hard to write something with it?
+
+A decent knowledge of C might be required, but the code is staright forward.
+In the ruby wrapper you can almost use "english to order covers":http://sahib.github.com/glyr/ruby_example.html .
+
+Bash scripts are even easier:
+@glyrc cover --artist Equilibrium --album Sagas@
+
+h3. How..how am I supposed to use it?
+
+Well, as normal user you could use @glyrc@ to retrieve some metadata in a batchlike fashion.
+As developers you have lots of option, you could write glyr-plugins for musicplayers (gmpc!), set up a webserver with this,
+hack up little scripts showing covers on the desktop.. everything related to musicmetadat is possible here.
+You could also extend libglyr itself but that's a little harder.
+
+<h3>Isn't there musicbrainz already?</h3>
+# The kind of metadata downloaded by glyr differs heavily from musicbrainz.
+i.e. glyr finds metadata for musicplayers while musicbrainz finds data for CD Rippers and taggers.
+# Musicbrainz runs remotely on some server and uses a large database which is searched through lucene.
+Glyr is a client program which hops over several sites and does not cache anything, unless you do it yourself.
+You could of course let glyr run on a (remote) server, and cache all results to do something similiar.
+
+h2. AUTHOR
+
+See the AUTHORS file that comes in glyr's distribution.
+See also COPYING to know about your rights.
+
+h2. CAN I HELP?
+
+h3. BUGS
+
+If you found one: _Meh. Sorry for that._
+If you file a bugreport: _Wow, thank you!_
+
+Use the "Issue Tracker":https://github.com/sahib/glyr/issues to share your find.
+Alternatively you may drop me a mail at <sahib@online.de>
+
+<h3>PATCHES</h3>
+If you hacked one: Excellent! Send it to me via mail or see below.
+If you want to add new providers you should look at the existing provider plugins to get an idea how to write one.
+Starting with lib/cover/lastfm.c isn't a bad idea either, because it is one of the very simple ones.
+
+__Take the usual Git(Hub) approach:__
+- Fork this project
+- Make your changes
+- Make a Pull request
+
+If you're not familiar with git, or just don't like it,
+you can also drop me a mail: <sahib@online.de>
+
+Thanks for any help in advance!
+
+h3. WRITE SOFTWARE THAT USES GLYR
+
+May sound strange, but you're giving me a reason to maintain it, write new providers etc.
+Also bugreports (well, there are no bugs, just in case) are appreciated, or just questions.
+Those help to make the documentation more clear.
+
+h3. DONATE
+
+You also might consider a small (CS-Students are already motivated by 1 Cent <img src="http://www.blendpolis.de/images/smilies/icon_wink.gif"/>) donation if you use feel like it:<a class="FlattrButton" style="display:none;" rev="flattr;button:compact;" href="https://github.com/sahib/glyr"></a>
+<noscript><a href="http://flattr.com/thing/302682/libglyr" target="_blank">
+<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></noscript>
+(For now only possible via Flattr or "Paypal":http://sahib.github.com/donate.html , you gonna need an account there - Sorry)
+
+h2. DISCLAIMER
+
+As usual, no warranty is granted that this software works like expected.
+Refer to the GPLv3 copy you got with libglyr. It is "here.":https://github.com/sahib/glyr/blob/master/COPYING
+Glyr is just a way to find the data, it does not own any rights on the data it found.
+Refer to the provider's terms of use. Every item you get from libglyr contains the name and a url to the provider.
+
+<br>
+<br>
+<br>
+<br>
+
+h3. 
+
+h4. @footnotes@
+
+[1] Glyr has not been tested on Mac OSX yet. If you own a Mac, any help with 'porting' glyr is highly appreciated. My guess would be that no to almost no changes need to be done though.
