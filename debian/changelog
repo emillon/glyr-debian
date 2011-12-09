@@ -1,0 +1,5 @@
+glyr (0.9-1) unstable; urgency=low
+
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- Etienne Millon <etienne.millon@gmail.com>  Fri, 09 Dec 2011 18:56:36 +0100

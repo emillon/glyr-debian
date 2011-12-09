@@ -1,0 +1,23 @@
+Source: glyr
+Priority: extra
+Maintainer: Etienne Millon <etienne.millon@gmail.com>
+Build-Depends: debhelper (>= 8.0.0), cmake
+Standards-Version: 3.9.2
+Section: libs
+Homepage: <insert the upstream URL, if relevant>
+#Vcs-Git: git://git.debian.org/collab-maint/glyr.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/glyr.git;a=summary
+
+Package: glyr-dev
+Section: libdevel
+Architecture: any
+Depends: glyrBROKEN (= ${binary:Version})
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>
+
+Package: glyrBROKEN
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>
