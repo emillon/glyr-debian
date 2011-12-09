@@ -1,7 +1,7 @@
 Source: glyr
 Priority: extra
 Maintainer: Etienne Millon <etienne.millon@gmail.com>
-Build-Depends: debhelper (>= 8.0.0), cmake
+Build-Depends: debhelper (>= 8.0.0), cmake, libcurl-dev
 Standards-Version: 3.9.2
 Section: libs
 Homepage: <insert the upstream URL, if relevant>
