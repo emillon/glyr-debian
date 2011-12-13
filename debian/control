@@ -23,3 +23,10 @@ Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: <insert up to 60 chars description>
  <insert long description, indented with spaces>
+
+Package: glyrc
+Section: unknown
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>
