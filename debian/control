@@ -10,17 +10,17 @@ Standards-Version: 3.9.2
 Section: libs
 Homepage: http://github.com/sahib/glyr
 
-Package: libglyr-dev
-Section: libdevel
-Architecture: any
-Depends: ${misc:Depends}, libglyr1 (= ${binary:Version})
-Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
-
 Package: libglyr1
 Section: libs
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>
+
+Package: libglyr-dev
+Section: libdevel
+Architecture: any
+Depends: ${misc:Depends}, libglyr1 (= ${binary:Version})
 Description: <insert up to 60 chars description>
  <insert long description, indented with spaces>
 
