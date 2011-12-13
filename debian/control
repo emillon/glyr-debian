@@ -3,7 +3,7 @@ Priority: extra
 Maintainer: Etienne Millon <etienne.millon@gmail.com>
 Build-Depends: cmake,
                debhelper (>= 8.0.0),
-               libcurl-dev,
+               libcurl-dev | libcurl4-dev,
                libglib2.0-dev,
                libsqlite3-dev
 Standards-Version: 3.9.2
