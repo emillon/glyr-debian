@@ -14,19 +14,24 @@ Package: libglyr1
 Section: libs
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
-Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
+Description: search engine for music-related metadata
+ Glyr is a library to retrieve music-related metadata from several
+ online providers (Amazon, Discogs, Musicbrainz...).
 
 Package: libglyr-dev
 Section: libdevel
 Architecture: any
 Depends: libglyr1 (= ${binary:Version}), ${misc:Depends}
-Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
+Description: search engine for music-related metadata - development files
+ Glyr is a library to retrieve music-related metadata from several
+ online providers (Amazon, Discogs, Musicbrainz...).
+ .
+ This package contains the header files necessary to build applications using
+ libglyr.
 
 Package: glyrc
 Section: unknown
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
-Description: <insert up to 60 chars description>
+Description: command-line interface to libglyr
  <insert long description, indented with spaces>
