@@ -13,7 +13,7 @@ Homepage: <insert the upstream URL, if relevant>
 Package: glyr-dev
 Section: libdevel
 Architecture: any
-Depends: glyr1 (= ${binary:Version})
+Depends: ${misc:Depends}, glyr1 (= ${binary:Version})
 Description: <insert up to 60 chars description>
  <insert long description, indented with spaces>
 
