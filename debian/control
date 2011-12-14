@@ -11,7 +11,6 @@ Section: libs
 Homepage: http://github.com/sahib/glyr
 
 Package: libglyr1
-Section: libs
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: search engine for music-related metadata
@@ -30,7 +29,7 @@ Description: search engine for music-related metadata - development files
  libglyr.
 
 Package: glyrc
-Section: unknown
+Section: sound
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: command-line interface to libglyr
