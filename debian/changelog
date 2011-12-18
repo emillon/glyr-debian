@@ -1,6 +1,8 @@
 glyr (0.9-1) unstable; urgency=low
 
   * Initial release (Closes: #651416).
-  * Remove embedded RSA MD5 library.
+  * Patches :
+    - Remove embedded RSA MD5 library.
+    - Fix a typo on "threshold"
 
- -- Etienne Millon <etienne.millon@gmail.com>  Sun, 18 Dec 2011 19:34:05 +0100
+ -- Etienne Millon <etienne.millon@gmail.com>  Sun, 18 Dec 2011 22:47:54 +0100
