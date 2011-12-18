@@ -4,5 +4,6 @@ glyr (0.9-1) unstable; urgency=low
   * Patches :
     - Remove embedded RSA MD5 library.
     - Fix a typo on "threshold"
+    - Fix a typo on "separated"
 
- -- Etienne Millon <etienne.millon@gmail.com>  Sun, 18 Dec 2011 22:47:54 +0100
+ -- Etienne Millon <etienne.millon@gmail.com>  Sun, 18 Dec 2011 22:57:19 +0100
