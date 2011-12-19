@@ -1,18 +1,40 @@
 Format: http://dep.debian.net/deps/dep5
 Upstream-Name: glyr
-Source: <url://example.com>
+Source: https://github.com/sahib/glyr/
 
 Files: *
-Copyright: <years> <put author's name and email here>
-           <years> <likewise for another author>
-License: <special license>
- <Put the license of the package here indented by 1 space>
- <This follows the format of Description: lines in control file>
+Copyright: 2011 Christopher Pahl <sahib@online.de>
+License: GPL-3+
+Comment:
+ Several files lack proper copyright headers. Christopher confirmed by
+ e-mail that the following files are copyright 2011 Christopher Pahl, and that
+ they will be tagged as such in the next release :
  .
- <Including paragraphs>
+ ./lib/intern/generic.h              ./spec/C/test_common.c
+ ./spec/C/test_common.h              ./spec/C/check_api.c
+ ./spec/C/check_opt.c                ./spec/C/check_dbc.c
+ ./spec/run.rb                       ./spec/Ruby/photos_spec.rb
+ ./spec/Ruby/review_spec.rb          ./spec/Ruby/tracklist_spec.rb
+ ./spec/Ruby/spec_helper.rb          ./spec/Ruby/misc_spec.rb
+ ./spec/Ruby/ainfo_spec.rb           ./spec/Ruby/general_spec.rb
+ ./spec/Ruby/similiarsongs_spec.rb   ./spec/Ruby/albumlist_spec.rb
+ ./spec/Ruby/cover_spec.rb           ./spec/Ruby/guitar_spec.rb
+ ./spec/Ruby/similiarartists_spec.rb ./spec/Ruby/tags_spec.rb
+ ./spec/Ruby/load_glyros.rb          ./spec/Ruby/lyrics_spec.rb
+ ./spec/Ruby/relation_spec.rb        ./lib/intern/lyrics/metallum.c
+ ./lib/intern/review/metallum.c      ./doc/build_doc.rb
+ ./src/examples/threads.c            ./src/examples/rating.c
+ ./src/examples/simple.c             ./src/examples/async_queue.c
+ ./src/examples/getinfo.c            ./src/examples/dbcache.c
+ ./src/examples/example.c            ./src/utils/ping_url.c
+ ./src/utils/guess_lang.c            ./swig/ruby/glyros.rb
+ ./lib/register_plugins.h            ./lib/register_plugins.c
+ ./lib/apikeys.h                     ./lib/config.h
 
-# If you want to use GPL v2 or later for the /debian/* files use
-# the following clauses, or change it to suit. Delete these two lines
+Files: lib/intern/similar_song/lastfm.c
+Copyright: 2011 sertzle
+License: GPL-3+
+
 Files: debian/*
 Copyright: 2011 Etienne Millon <etienne.millon@gmail.com>
 License: GPL-2+
@@ -32,5 +54,20 @@ License: GPL-2+
  On Debian systems, the complete text of the GNU General
  Public License version 2 can be found in "/usr/share/common-licenses/GPL-2".
 
-# Please also look if there are files or directories which have a
-# different copyright/license attached and list them here.
+License: GPL-3+
+ glyr is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ .
+ glyr is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with glyr. If not, see <http://www.gnu.org/licenses/>.
+ .
+ .
+ On Debian systems, the complete text of the GNU General
+ Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".
