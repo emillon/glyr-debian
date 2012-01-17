@@ -99,6 +99,23 @@ void glyr_query_init(GlyrQuery * query);
 void glyr_query_destroy(GlyrQuery * query);
 
 /**
+ * glyr_signal_exit:
+ * @query: The currently running query you want to stop.
+ * 
+ * Try to stop libglyr as soon as possible.
+ * This is supposed to be called on another thread.
+ * Calling this function twice on the same query will do nothing.
+ * <note>
+ * <para>
+ * This function is threadsafe - but use with care anyway, 
+ * since it causes libglyr to do really a hard stop.
+ * The returned data is NOT guaranteed to yield best results.
+ * </para>
+ * </note>
+ */
+void glyr_signal_exit(GlyrQuery * query);
+
+/**
  * glyr_free_list:
  * @head: The head of the doubly linked list that should be freed.
  *
@@ -771,6 +788,51 @@ GLYR_ERROR glyr_opt_db_autowrite(GlyrQuery * s, bool write_to_db);
 * Returns: an error ID
 **/
 GLYR_ERROR glyr_opt_db_autoread(GlyrQuery * s, bool read_from_db);
+
+/**
+ * glyr_opt_musictree_path:
+* @s: The GlyrQuery settings struct to store this option in.
+* @musictree_path: The concrete path (relative or absolute) where a mediafile reisdes (see below) 
+*
+* Set the path to a specific mediafile and glyr will try to fetch covers from directories around this,
+* since many people place things like 'folder.jpg' there. Instead of the actual file you can also pass the 
+* containing directory (see the 'dirname' utility) - the path can be either absolute or relative.
+*
+* From there on it works by cascading upwards - i.e. checking all files in the dir (not recursing), go up, repeat.
+* This will be repeated $(recurse_depth) times or till it cannot go upwards.
+* How the file is checked depends on the metadata type to search, see below.
+*
+* For reference the actual C code is given (${artist} gets expanded):
+* <example>
+* <title>Used regexes and recurse_depth</title>
+* <programlisting>
+        case GLYR_GET_COVERART:
+            search_regex = "^(folder|front|cover|.*${album}.*)\\.(jpg|png|jpeg|gif)";
+            recurse_depth = 2;
+            break;
+        case GLYR_GET_ARTIST_PHOTOS:
+            search_regex = "^(${artist}|artist)\\.(jpg|png|jpeg|gif)$";
+            recurse_depth = 3;
+            break;
+        case GLYR_GET_ALBUM_REVIEW:
+            search_regex = "^(${album})\\.(info|txt)$";
+            recurse_depth = 2;
+            break;
+        case GLYR_GET_ARTISTBIO:
+            search_regex = "^BIOGRAPHY(\\.txt)?$";
+            recurse_depth = 2;
+            break;
+        default: 
+            search_regex = NULL;
+            recurse_depth = 0;
+            break;
+* </programlisting>
+* </example>
+*            
+*
+* Returns: an error ID
+*/  
+GLYR_ERROR glyr_opt_musictree_path(GlyrQuery * s, const char * musictree_path);
 
 /**
 * glyr_download:

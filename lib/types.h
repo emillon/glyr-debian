@@ -45,7 +45,8 @@
 #define GLYR_DEFAULT_QSRATIO 0.85
 #define GLYR_DEFAULT_FORCE_UTF8 false
 #define GLYR_DEFAULT_DB_AUTOWRITE true 
-#define GLYR_DEFAULT_DB_AUTOREAD  true
+#define GLYR_DEFAULT_DB_AUTOREAD true
+#define GLYR_DEFAULT_MUISCTREE_PATH NULL
 #define GLYR_DEFAULT_SUPPORTED_LANGS "en;de;fr;es;it;jp;pl;pt;ru;sv;tr;zh"
 #define GLYR_DEFAULT_LANG_AWARE_ONLY false
 
@@ -96,7 +97,8 @@ typedef enum
     GLYRE_SKIP,        
     GLYRE_STOP_POST,  
     GLYRE_STOP_PRE,   
-    GLYRE_NO_INIT     
+    GLYRE_NO_INIT,
+    GLYRE_WAS_STOPPED    
 }   GLYR_ERROR;
 
 /**
@@ -268,13 +270,15 @@ typedef struct _GlyrMemCache {
  * GlyrDatabase:
  * @root_path: The directory where the database will be stored.
  * 
- * Represents a database where caches may be fetched from.
+ * Represents an opaque database structure where caches may be fetched from.
+ * It's members should not be accessed directly.
  */
+struct _GlyrDatabase;
 typedef struct _GlyrDatabase {
-        /*< public >*/
+    /*< public >*/
 	char * root_path;
 	
-        /*< private >*/
+    /*< private >*/
 	sqlite3 * db_handle;
 
 } GlyrDatabase;
@@ -298,6 +302,7 @@ typedef struct _GlyrDatabase {
 * @db_autowrite: Write found items automagically to the cache, if any specified by glyr_opt_lookup_db()
 * @local_db: The database to write and search in.
 * @lang_aware_only: Use only providers that deliver language specific content.
+* @signal_exit: By default false, but true when stopping searching is required.
 * @lang: Language code ISO-639-1, like 'de','en' or 'auto'
 * @proxy: The proxy to use.
 * @artist: Artist to use.
@@ -306,6 +311,7 @@ typedef struct _GlyrDatabase {
 * @from: Define what providers are queried.
 * @allowed_formats: Allowed imageformats.
 * @useragent: Useragent to use during http-requests
+* @musictree_path: Used for the musictree provider.
 *
 * This structure holds all settings used to influence libglyr.
 * You should set all fields glyr_opt_*, refer also to the documentation there to find out their exact meaning.
@@ -338,6 +344,9 @@ typedef struct _GlyrQuery {
 
     bool lang_aware_only;
 
+    /* Signal conditions */
+    volatile int signal_exit;
+
     /* Dynamic allocated */
     char * lang; 
     char * proxy; 
@@ -347,6 +356,7 @@ typedef struct _GlyrQuery {
     char * from;   
     char * allowed_formats; 
     char * useragent; 
+    char * musictree_path;
 
 #ifndef __GTK_DOC_IGNORE__
     struct {
