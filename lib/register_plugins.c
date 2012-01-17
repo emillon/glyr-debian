@@ -1,3 +1,23 @@
+/***********************************************************
+ * This file is part of glyr
+ * + a commnandline tool and library to download various sort of musicrelated metadata.
+ * + Copyright (C) [2011-2012]  [Christopher Pahl]
+ * + Hosted at: https://github.com/sahib/glyr
+ *
+ * glyr is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * glyr is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with glyr. If not, see <http://www.gnu.org/licenses/>.
+ **************************************************************/
+
 /* register all plugins here */
 #include "core.h"
 #include "register_plugins.h"
@@ -65,7 +85,6 @@ extern MetaDataSource photos_discogs_src;
 extern MetaDataSource photos_rhapsody_src;
 extern MetaDataSource photos_picsearch_src;
 extern MetaDataSource relations_musicbrainz_src;
-extern MetaDataSource relations_generated_src;
 extern MetaDataSource review_allmusic_src;
 extern MetaDataSource review_amazon_src;
 extern MetaDataSource review_metallum_src;
@@ -76,7 +95,11 @@ extern MetaDataSource tracklist_musicbrainz_src;
 extern MetaDataSource guitartabs_guitaretab_src;
 extern MetaDataSource guitartabs_chordie_src;
 extern MetaDataSource backdrops_htbackdrops_src;
+
+/* Special offline providers */
 extern MetaDataSource local_provider_src;
+extern MetaDataSource relations_generated_src;
+extern MetaDataSource musictree_provider_src;
 
 // Disabled due to bad quality.
 //extern MetaDataSource lyrics_darklyrics_src;
@@ -118,7 +141,10 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&albumlist_musicbrainz_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_albumart_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_allmusic_src);
-    plugin_add_to_list(&glyrMetaDataSourceList,&cover_amazon_src);
+
+    // FIXME: Silly amazon requires to be a Seller to use their API
+    // WTF?! God I hate thos Just-for-the-paying people-salesmen
+    // plugin_add_to_list(&glyrMetaDataSourceList,&cover_amazon_src);
 
     //FIXME: Coverhunt seems to be down. Add again when up and running
     // plugin_add_to_list(&glyrMetaDataSourceList,&cover_coverhunt_src);
@@ -140,7 +166,10 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_metrolyrics_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_metallum_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_elyrics_src);
-    plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_chartlyrics_src);
+
+// FIXME: Chartlyrics reacts very slowly, and often not at all
+// add again when running again ( :( - good api though)    
+//    plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_chartlyrics_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_flickr_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_google_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_lastfm_src);
@@ -149,9 +178,10 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_rhapsody_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_picsearch_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&relations_musicbrainz_src);
-    plugin_add_to_list(&glyrMetaDataSourceList,&relations_generated_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&review_allmusic_src);
-    plugin_add_to_list(&glyrMetaDataSourceList,&review_amazon_src);
+    // FIXME: Silly amazon requires to be a Seller to use their API
+    // WTF?! God I hate thos Just-for-the-paying people-salesmen
+    //plugin_add_to_list(&glyrMetaDataSourceList,&review_amazon_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&review_metallum_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&similar_artist_lastfm_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&similar_song_lastfm_src);
@@ -160,7 +190,11 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&guitartabs_guitaretab_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&guitartabs_chordie_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&backdrops_htbackdrops_src);
+
+    /* Special offline providers */
+    plugin_add_to_list(&glyrMetaDataSourceList,&relations_generated_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&local_provider_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&musictree_provider_src);
 }
 
 /* --------------------------------------- */
