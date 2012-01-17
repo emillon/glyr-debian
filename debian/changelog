@@ -1,9 +1,8 @@
-glyr (0.9-1) unstable; urgency=low
+glyr (0~git20111229-1) unstable; urgency=low
 
   * Initial release (Closes: #651416).
   * Patches :
-    - Remove embedded RSA MD5 library.
     - Fix a typo on "threshold"
     - Fix a typo on "separated"
 
- -- Etienne Millon <etienne.millon@gmail.com>  Sun, 18 Dec 2011 22:57:19 +0100
+ -- Etienne Millon <etienne.millon@gmail.com>  Tue, 17 Jan 2012 10:47:04 +0100
