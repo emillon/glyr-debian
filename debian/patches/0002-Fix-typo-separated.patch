@@ -10,10 +10,10 @@ Glyr source code contains several occurrences of a typo on "separated".
  3 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/lib/glyr.h b/lib/glyr.h
-index 48a3ac7..1627c74 100644
+index 376bbab..bfc8ce2 100644
 --- a/lib/glyr.h
 +++ b/lib/glyr.h
-@@ -558,7 +558,7 @@ GLYR_ERROR glyr_opt_plugmax(GlyrQuery * s, int plugmax);
+@@ -575,7 +575,7 @@ GLYR_ERROR glyr_opt_plugmax(GlyrQuery * s, int plugmax);
  /**
  * glyr_opt_allowed_formats:
  * @s: The GlyrQuery settings struct to store this option in.
@@ -23,7 +23,7 @@ index 48a3ac7..1627c74 100644
  * Restricts providers to retrieve at max. @plugmax items, you might use this to get results
  * over several providers when glyr_opt_number() is set to something higher than 1.
 diff --git a/lib/intern/lyrics/elyrics.c b/lib/intern/lyrics/elyrics.c
-index c4cec17..ab59852 100644
+index 8c4ed29..891f4f9 100644
 --- a/lib/intern/lyrics/elyrics.c
 +++ b/lib/intern/lyrics/elyrics.c
 @@ -54,7 +54,7 @@ static const gchar * lyrics_elyrics_url(GlyrQuery * settings)
@@ -36,10 +36,10 @@ index c4cec17..ab59852 100644
  {
      gchar * from_middle = strstr(string,FROM_MIDDLE);
 diff --git a/src/glyrc/glyrc.c b/src/glyrc/glyrc.c
-index 0053d1e..10e844c 100644
+index 0c9b2c6..298e7e6 100644
 --- a/src/glyrc/glyrc.c
 +++ b/src/glyrc/glyrc.c
-@@ -183,7 +183,7 @@ void help_short(GlyrQuery * s)
+@@ -186,7 +186,7 @@ void help_short(GlyrQuery * s)
              IN"-t --title            String: Songname to search for\n"
              IN"-e --maxsize          Integer: (images only) The maximum size a cover may have.\n"
              IN"-i --minsize          Integer: (images only) The minimum size a cover may have.\n"
