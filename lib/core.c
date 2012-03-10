@@ -38,15 +38,17 @@
 
 /*--------------------------------------------------------*/
 
+
 static int _msg(const char * fmt, va_list params)
 {
 	gchar * tmp_buf = NULL;
+
+    /* Silly, but needs a way to get length */
 	gint written = g_vasprintf(&tmp_buf,fmt,params);
 
 	if(written != -1 && tmp_buf != NULL)
 	{
-		fwrite(tmp_buf,written,1,GLYR_OUTPUT);
-//        g_message("%s",tmp_buf);
+        g_log(G_LOG_DOMAIN,G_LOG_LEVEL_INFO,"%s",tmp_buf);
 		g_free(tmp_buf);
 		tmp_buf = NULL;
 	}
@@ -191,10 +193,12 @@ GlyrMemCache * DL_copy(GlyrMemCache * cache)
         {
             /* Remember NUL for strings */
             result->data = g_malloc(cache->size + 1);
+            result->data[cache->size] = 0;
             memcpy(result->data,cache->data,cache->size);
         }
         result->dsrc = g_strdup(cache->dsrc);
         result->prov = g_strdup(cache->prov);
+        result->img_format = g_strdup(cache->img_format);
         memcpy(result->md5sum,cache->md5sum,16);
 
         result->next = NULL;
@@ -243,11 +247,12 @@ GlyrMemCache* DL_init(void)
 {
     GlyrMemCache * cache = g_malloc0(sizeof(GlyrMemCache));
     memset(cache,0,sizeof(GlyrMemCache));
-    cache->type = GLYR_TYPE_NOIDEA;
 
+    cache->type = GLYR_TYPE_NOIDEA;
     cache->cached = FALSE;
     cache->duration = 0;
     cache->rating = 0;
+    cache->timestamp = 0.0;
     return cache;
 }
 
@@ -491,7 +496,7 @@ static DLBufferContainer * DL_setopt(CURL *eh, GlyrMemCache * cache, const char 
     curl_easy_setopt(eh, CURLOPT_NOSIGNAL, 1L);
 
     // last.fm and discogs require an useragent (wokrs without too)
-    curl_easy_setopt(eh, CURLOPT_USERAGENT, GLYR_DEFAULT_USERAGENT);
+    curl_easy_setopt(eh, CURLOPT_USERAGENT, (s && s->useragent) ? s->useragent : GLYR_DEFAULT_USERAGENT);
     curl_easy_setopt(eh, CURLOPT_HEADER, 0L);
 
     // Pass vars to curl

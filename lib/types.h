@@ -20,6 +20,18 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+/**
+ * SECTION:types
+ * @short_description: Types, Enums and Defines of libglyr
+ * @title: Types
+ * @section_id:
+ * @stability: Stable
+ * @include: glyr/types.h
+ *
+ * All structs / enums / defines of the libglyr API can be found here.
+ * You do not need to include this header directly, use glyr/glyr.h
+ */
+
 #include <stdlib.h>
 #include <stdbool.h>
 #include <sqlite3.h>
@@ -58,7 +70,7 @@
 #define GLYR_DEFAULT_ALLOWED_FORMATS "png;jpeg;tiff;jpg;"
 
 /* Be honest by default */
-#define GLYR_DEFAULT_USERAGENT "libglyr/"GLYR_VERSION_MAJOR"."GLYR_VERSION_MINOR"-"GLYR_VERSION_MICRO" ("GLYR_VERSION_NAME")"
+#define GLYR_DEFAULT_USERAGENT "libglyr/"GLYR_VERSION_MAJOR"."GLYR_VERSION_MINOR"-"GLYR_VERSION_MICRO" ("GLYR_VERSION_NAME") +https://www.github.com/sahib/glyr"
 
 /* --------------------------- */
 /* --------- GROUPS ---------- */
@@ -78,6 +90,7 @@
  * @GLYRE_STOP_POST: Will stop searching, but still add the current item 
  * @GLYRE_STOP_PRE: Will stop searching, but won't add the current item
  * @GLYRE_NO_INIT: Library has not been initialized with glyr_init() yet
+ * @GLYRE_WAS_STOPPED: Library was stopped by glyr_signal_exit()  
  *
  * All errors you can get, via glyr_get() and the glyr_opt_* calls.
  * 
@@ -154,8 +167,6 @@ typedef enum
 * @GLYR_TYPE_ALBUM_REVIEW: Albumreview
 * @GLYR_TYPE_ARTIST_PHOTO: Pictures showing a certain band
 * @GLYR_TYPE_COVERART: coverart
-* @GLYR_TYPE_COVERART_PRI:  A cover known to be the front side of the album 
-* @GLYR_TYPE_COVERART_SEC:  A cover known to be the backside: inlet etc. 
 * @GLYR_TYPE_ARTISTBIO: Artist bio 
 * @GLYR_TYPE_SIMILAR_ARTIST: Similiar artists 
 * @GLYR_TYPE_SIMILAR_SONG: Similar songs 
@@ -173,7 +184,8 @@ typedef enum
 * 
 * Mainly used in the 'type' field of GlyrMemCache.
 * It describes what kind of data the cache holds.
-* 
+* As a user of the API you will need this very seldom.
+* libglyr makes internally use of it.
 */
 
 /* DO NOT CHANGE THE ORDER HERE 
@@ -187,8 +199,6 @@ typedef enum
     GLYR_TYPE_ALBUM_REVIEW, 
     GLYR_TYPE_ARTIST_PHOTO, 
     GLYR_TYPE_COVERART,  
-    GLYR_TYPE_COVERART_PRI, 
-    GLYR_TYPE_COVERART_SEC, 
     GLYR_TYPE_ARTISTBIO,  
     GLYR_TYPE_SIMILAR_ARTIST,
     GLYR_TYPE_SIMILAR_SONG, 
@@ -241,11 +251,14 @@ typedef enum
  * @img_format: Format of the image (png,jpeg), NULL if text item.
  * @md5sum: A md5sum of the data field.
  * @cached: If this cache was locally cached.
+ * @timestamp: This is used internally by libglyr.
  * @next: A pointer to the next item in the list, or NULL
  * @prev: A pointer to the previous item in the list, or NULL
  *
  * GlyrMemCache represents a single item received by libglyr. 
- * You should <emphasis>NOT</emphasis> modify any of the fields (with the sole excepetion of @rating), it is meant to be read-only.
+ * You should <emphasis>NOT</emphasis> modify any of the fields directly, they are meant to be read-only.
+ * If you need to set any field (usually only necessary in conjunction with glyr/cache.h) you may 
+ * want to use the glyr_cache_set_<public field> routines to safely modify the data.
  */
 typedef struct _GlyrMemCache {
 
@@ -261,6 +274,7 @@ typedef struct _GlyrMemCache {
   char * img_format; 
   unsigned char md5sum[16]; 
   bool cached;
+  double timestamp;
 
   struct _GlyrMemCache * next; 
   struct _GlyrMemCache * prev; 
@@ -289,7 +303,7 @@ typedef struct _GlyrDatabase {
 * @number: The maximum number of items to get; 0 -> inf
 * @plugmax: Max number of items per provider.
 * @verbosity: How verbose this query should be treated.
-* @fuzzyness: Max. treshold for levenshtein.
+* @fuzzyness: Max. threshold for levenshtein.
 * @img_min_size: Min. size in pixels an image may have.
 * @img_max_size: Min. size in pixels an image may have.
 * @parallel: Max. number of parallel queried providers.

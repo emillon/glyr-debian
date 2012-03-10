@@ -116,6 +116,7 @@ describe "cover" do
 		end
 	end
 
+=begin
 	describe "amazon" do
 		before :each do
 			@spit.from = "amazon"
@@ -142,6 +143,7 @@ describe "cover" do
 			list.size.should equal 0
 		end
 	end
+=end
 
 	# coverhnt seems to be down.
 
@@ -151,8 +153,8 @@ describe "cover" do
 		end
 		
 		it "should test a pagehit" do
-			@spit.artist = "Böhse Onkelz"
-			@spit.album  = "Buch der Erinnerung"
+			@spit.artist = "Nirvana"
+			@spit.album  = "In Utero"
 			list = @spit.get
 
 			list.should be_an_instance_of Array
@@ -267,6 +269,34 @@ describe "cover" do
 		it "should test a pagehit" do
 			@spit.artist = "knorkator"
 			@spit.album  = "hasenchartbreaker"
+			list = @spit.get
+
+			list.should be_an_instance_of Array
+			list.size.should equal 1
+			list.first.should be_an_instance_of Glyros::GlyrMemCache
+
+			show_in_sxiv(list.first)
+		end
+
+		it "Don't know this cover" do
+			@spit.artist = "Unknownartist" 
+			@spit.album  = "Myalbum"
+			list = @spit.get
+
+			list.should be_an_instance_of Array
+			list.size.should equal 0
+		end
+	end
+	
+    describe "jamendo" do
+		before :each do
+			@spit.from = "jamendo"
+		end
+		
+		it "should test a pagehit" do
+			@spit.artist = "Diablo Swing Orchestra"
+			@spit.album  = "The Butcher's Ballroom"
+            @spit.max_size = 599
 			list = @spit.get
 
 			list.should be_an_instance_of Array

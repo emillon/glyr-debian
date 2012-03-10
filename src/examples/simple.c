@@ -18,7 +18,7 @@
  * along with glyr. If not, see <http://www.gnu.org/licenses/>.
  **************************************************************/
 
-/* Simples possible example for libglyr, see src/example.c for a little more advanced one */
+/* Simplest possible example of libglyr, see src/example.c for a little more advanced one */
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -27,7 +27,6 @@
 
 /* use this include path for your project, or directly clone libglyr to your project */
 //#include <glyr/glyr.h>
-
 
 int main(void)
 {
@@ -61,7 +60,8 @@ int main(void)
     if(head != NULL)
     {
         /* head contains also a pointer to the next element, you can use it therefore as linkedlist */
-        puts(head->data);
+        //        puts(head->data);
+        glyr_cache_print(head);
 
         /* We have to free it again also, you can pass ANY pointer of the list, it works in both directions */
         glyr_free_list(head);

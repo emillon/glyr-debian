@@ -38,7 +38,7 @@ ENDIF()
 # ------------------------------------------------
 SET(GLYR_VERSION_MAJOR "0")
 SET(GLYR_VERSION_MINOR "9")
-SET(GLYR_VERSION_MICRO "1")
+SET(GLYR_VERSION_MICRO "5")
 SET(GLYR_VERSION_NAME  "Catholic Cat")
 # ------------------------------------------------
 
@@ -51,11 +51,13 @@ SET(GLYR_VERSION_NAME  "Catholic Cat")
 IF(CMAKE_BUILD_TYPE STREQUAL "debug")
     SET(GLYR_DEBUG TRUE)
 ELSE()
+    SET(CMAKE_BUILD_TYPE "release")
     SET(GLYR_DEBUG FALSE)
 ENDIF()
+MESSAGE("-- Building Target: ${CMAKE_BUILD_TYPE}")
 
 SET(COMMON_FLAGS "-Wall -Wextra -Wstrict-prototypes -std=c99 -W -Wno-unused-parameter -Wno-strict-prototypes")
-SET(CMAKE_C_FLAGS_RELEASE "${COMMON_FLAGS} ${CMAKE_C_FLAGS} -Os -march=native -s")
+SET(CMAKE_C_FLAGS_RELEASE "${COMMON_FLAGS} ${CMAKE_C_FLAGS} -Os -s")
 SET(CMAKE_C_FLAGS_DEBUG   "${COMMON_FLAGS} ${CMAKE_C_FLAGS} -ggdb3")
 SET(CMAKE_C_FLAGS "${COMMON_FLAGS} ${CMAKE_C_FLAGS}")
 # ------------------------------------------------
@@ -153,6 +155,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_RELATIONS}/generated.c"
 	"${DIR_TAGS}/musicbrainz.c"
 	"${DIR_COVER}/lastfm.c"
+	"${DIR_COVER}/jamendo.c"
 	"${DIR_COVER}/google.c"
 	"${DIR_COVER}/coverhunt.c"
 	"${DIR_COVER}/lyricswiki.c"
@@ -198,7 +201,7 @@ ADD_SUBDIRECTORY( ${SUBDIR_LIB} )
 ADD_SUBDIRECTORY( ${SUBDIR_SRC} )
 
 IF(DEFINED TEST)
-    MESSAGE("-- Building with tests (${TEST})")
+    MESSAGE("-- Building with tests: ${TEST}")
     ADD_SUBDIRECTORY( spec/C )
     ADD_CUSTOM_TARGET(test COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/spec/run.rb" DEPENDS check_api)
 ENDIF()
@@ -213,3 +216,11 @@ configure_file(
     )
 
 ADD_CUSTOM_TARGET(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+
+set(PROJECT_VERSION ${GLYR_VERSION_MAJOR}.${GLYR_VERSION_MINOR}.${GLYR_VERSION_MICRO})
+
+set(ARCHIVE_NAME ${CMAKE_PROJECT_NAME}-${PROJECT_VERSION})
+ADD_CUSTOM_TARGET(dist
+    COMMAND git archive --prefix=${CMAKE_PROJECT_NAME}/ HEAD
+        | bzip2 > ${CMAKE_BINARY_DIR}/${ARCHIVE_NAME}.tar.bz2
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
