@@ -28,7 +28,7 @@
 #define LIPWALK_URL LIPWALK_DOMAIN"/component/lyrics/search/index.php?search=${artist}%20${title}"
 
 #define START "</script><div class=\"clearboth\"></div>"
-#define END "</div>"
+#define END "<h5 class=\"bottomViewing\">"
 
 #define IS_ON_SEARCH_PAGE "<title>Search results for"
 
@@ -42,14 +42,14 @@ static const gchar * lyrics_lipwalk_url(GlyrQuery * settings)
 static GlyrMemCache * parse_lyrics_page(GlyrMemCache * cache)
 {
 	gchar * start = NULL;
-	gchar * end   = NULL;
+	gchar * end = NULL;
 	gchar * content = NULL;
 
 	GlyrMemCache * result_cache = NULL;
 	if (cache && (start = strstr(cache->data,START)) != NULL)
 	{
-        start = strstr(start,"<br />");
-		if (start && (end = strstr(start + (sizeof START) ,END)) != NULL)
+        start += (sizeof START) - 1;
+		if(start && (end = strstr(start + (sizeof START) ,END)) != NULL)
 		{
 			if (ABS(end-start) > 35)
 			{

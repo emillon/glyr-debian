@@ -75,6 +75,7 @@ static GList * lyrics_chartlyrics_parse(cb_object * capo)
 	GList * result_list = NULL;
 	gchar * node = capo->cache->data;
 	gint nodelen = (sizeof LYRIC_NODE) - 1;
+
 	while(continue_search(g_list_length(result_list),capo->s) && (node = strstr(node + nodelen, LYRIC_NODE)) != NULL)
 	{
 		node += nodelen;
@@ -82,11 +83,11 @@ static GList * lyrics_chartlyrics_parse(cb_object * capo)
 		gchar * title  = get_search_value(node,SONG_BEG,SONG_END);
 
 		if(levenshtein_strnormcmp(capo->s,artist,capo->s->artist) <= capo->s->fuzzyness &&
-                   levenshtein_strnormcmp(capo->s,title,capo->s->title) <= capo->s->fuzzyness)
+           levenshtein_strnormcmp(capo->s,title,capo->s->title)   <= capo->s->fuzzyness)
 		{
 			gchar * lyric_id = get_search_value(node,LYRIC_ID_BEG,LYRIC_ID_END);
 			gchar * lyric_checksum = get_search_value(node,LYRIC_CHECKSUM_BEG,LYRIC_CHECKSUM_END);
-			if(lyric_id && lyric_checksum)
+			if(lyric_id && lyric_checksum && strcmp(lyric_id,"0") != 0)
 			{
 				gchar * content_url = g_strdup_printf(CL_API_GET,lyric_id,lyric_checksum);
 				GlyrMemCache * result = get_lyrics_from_results(capo->s,content_url);

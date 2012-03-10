@@ -20,6 +20,17 @@
 #ifndef GLYR_H
 #define GLYR_H
 
+/**
+ * SECTION:glyr
+ * @short_description: Main interface to search metadata 
+ * @title: Glyr 
+ * @section_id:
+ * @stability: Stable
+ * @include: glyr/glyr.h
+ *
+ * All functions used to search metadata and use the essential of libglyr
+ * is located here. 
+ */
 /* All structs used by glyr are here */
 #include "types.h"
 
@@ -156,6 +167,43 @@ void glyr_cache_free(GlyrMemCache * cache);
 GlyrMemCache * glyr_cache_copy(GlyrMemCache * cache);
 
 /**
+ * glyr_cache_set_dsrc:
+ * @cache: The cache to change
+ * @download_source: The string to be changed too
+ *
+ * Copies download_source to the dsrc field, clearing all previously allocated content safely.
+ */
+void glyr_cache_set_dsrc(GlyrMemCache * cache, const char * download_source);
+/**
+ * glyr_cache_set_prov:
+ * @cache: The cache to change
+ * @provider: The string to be changed too
+ *
+ * Copies provider to the prov field, clearing all previously allocated content safely.
+ */
+void glyr_cache_set_prov(GlyrMemCache * cache, const char * provider);
+/**
+ * glyr_cache_set_img_format:
+ * @cache: The cache to change
+ * @img_format: The string to be changed too
+ *
+ * Copies img_format to the img_format field, clearing all previously allocated content safely.
+ */
+void glyr_cache_set_img_format(GlyrMemCache * cache, const char * img_format);
+/**
+ * glyr_cache_set_type:
+ * @cache: The cache to change
+ * @type: The new type
+ */
+void glyr_cache_set_type(GlyrMemCache * cache, GLYR_DATA_TYPE type);
+/**
+ * glyr_cache_set_rating:
+ * @cache: The cache to change
+ * @rating: The new rating 
+ */
+void glyr_cache_set_rating(GlyrMemCache * cache, int rating);
+
+/**
 * glyr_cache_set_data:
 * @cache: The cache where to set the data.
 * @data: The data
@@ -164,7 +212,8 @@ GlyrMemCache * glyr_cache_copy(GlyrMemCache * cache);
 * Safely sets the data of the cache. It frees the old data first, updates 
 * the checksum and adjusts the size fields accordingly to len.
 * If len is a negative number strlen() is used to determine the size.
-* Note: @data is set directly! It get's freed once you free the cache. Be sure it's safe to be free'd.
+*
+* Attention: @data is set directly! It get's freed once you free the cache. Be sure it's safe to be free'd.
 *
 */
 void glyr_cache_set_data(GlyrMemCache * cache, const char * data, int len);
@@ -575,7 +624,7 @@ GLYR_ERROR glyr_opt_plugmax(GlyrQuery * s, int plugmax);
 /**
 * glyr_opt_allowed_formats:
 * @s: The GlyrQuery settings struct to store this option in.
-* @formats: A commaseperated list of allowed formats.
+* @formats: A commaseparated list of allowed formats.
 *
 * Restricts providers to retrieve at max. @plugmax items, you might use this to get results
 * over several providers when glyr_opt_number() is set to something higher than 1.
@@ -913,7 +962,7 @@ void glyr_info_free(GlyrFetcherInfo * info);
 
 /**
 * glyr_data_type_to_string:
-* @type: a member of the %GLYR_DATA_TYPE enum, %GLYR_TYPE_COVERART_PRI for example
+* @type: a member of the %GLYR_DATA_TYPE enum, %GLYR_TYPE_LYRICS for example
 *
 * Converts a type to a string.
 *
@@ -954,6 +1003,39 @@ char * glyr_md5sum_to_string(unsigned char * md5sum);
 * a size >= 16 bytes.
 */
 void glyr_string_to_md5sum(const char * string, unsigned char * md5sum);
+
+/**
+ * glyr_get_requirements:
+ * @type: The type to get the requirements from
+ *
+ * Different getters need different fields set. You can use this
+ * to check if the artist, album and title field of a specific getter 
+ * is required or optional.
+ *
+ * <informalexample>
+ * <programlisting>
+ * GLYR_FIELD_REQUIREMENT reqs = glyr_get_requirements(GLYR_GET_COVERART);
+ * if(reqs & GLYR_REQUIRES_ALBUM)
+ * { 
+ *    // do something when artist is required
+ * }
+ * else
+ * if(reqs / GLYR_OPTIONAL_TITLE)
+ * {
+ *   // Title is optional
+ * }
+ * else
+ * {
+ *   // None of both
+ * }
+ * </programlisting>
+ * </informalexample>
+ *
+ * Returns: A bitmask out of members of GLYR_FIELD_REQUIREMENT
+ */
+GLYR_FIELD_REQUIREMENT glyr_get_requirements(GLYR_GET_TYPE type);
+
+    
 
 #ifdef _cplusplus
 }

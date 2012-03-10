@@ -21,6 +21,59 @@
 #ifndef GLYR_CACHE_H
 #define GLYR_CACHE_H
 
+/**
+ * SECTION:cache
+ * @short_description: A fast SQLite cache for glyr's results 
+ * @title: Cache 
+ * @section_id:
+ * @stability: Stable
+ * @include: glyr/cache.h
+ *
+ * The Cache offers application authors to store the items found 
+ * by glyr persistently in a DB-Cache and get them again once needed.
+ * Before usage it is necessary to open the DB via glyr_db_init(),
+ * which expects a folder where the DB will be stored, after this
+ * there are 4 operations you can use on the query:
+ * <itemizedlist>
+ * <listitem>
+ * <para>
+ * Lookup by a Query (glyr_db_lookup())
+ * </para>
+ * </listitem>
+ * <listitem>
+ * <para>
+ * Delete by a Query (glyr_db_delete())
+ * </para>
+ * </listitem>
+ * <listitem>
+ * <para>
+ * Insert (glyr_db_insert())
+ * </para>
+ * </listitem>
+ * <listitem>
+ * <para>
+ * Iterate (glyr_db_foreach())
+ * </para>
+ * </listitem>
+ * </itemizedlist>
+ *
+ *
+ * If you want to insert "own" caches, e.g. to indicate that some artist wasn't found you could use 
+ * the following piece of code:
+ * <informalexample>
+ * <programlisting>
+        // Create a new "dummy" cache
+        GlyrMemCache * ct = glyr_db_make_dummy();
+
+        // Query with filled in artist, album, title, type,
+        // and opened db
+        glyr_db_insert(db,&q,ct);
+
+        glyr_cache_free(ct);
+ * </programlisting>
+ * </informalexample>
+ */
+
 #include "types.h"
 
 #ifdef __cplusplus
@@ -43,7 +96,7 @@ typedef int (*glyr_foreach_callback)(GlyrQuery * q, GlyrMemCache * item, void * 
 *
 * Returns: A newly allocated GlyrDatabase, free with glyr_db_destroy
 */
-GlyrDatabase * glyr_db_init(char * root_path);
+GlyrDatabase * glyr_db_init(const char * root_path);
 
 /** 
 * glyr_db_destroy:
@@ -224,6 +277,20 @@ void glyr_db_replace(GlyrDatabase * db, unsigned char * md5sum, GlyrQuery * quer
 *
 */
 void glyr_db_foreach(GlyrDatabase * db, glyr_foreach_callback cb, void * userptr);
+
+
+/**
+ * glyr_db_make_dummy: 
+ *
+ * The idea behind this function is to create a dummy entry for the cache, e.g. to indicate a certain item
+ * was not found. In this case you create a dummy with a 'rating' of -1 and push it into the DB. 
+ * If one does a lookup (via glyr_get() or glyr_db_lookup()) then this cache will be returned, one is able
+ * to check if the item was not found before. 
+ *
+ * Returns: A newly allocated cache, use glyr_cache_free() to free it.
+ */
+GlyrMemCache * glyr_db_make_dummy(void);
+
 #ifdef __cplusplus
 }
 #endif
