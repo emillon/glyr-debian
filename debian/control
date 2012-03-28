@@ -17,6 +17,17 @@ Description: search engine for music-related metadata
  Glyr is a library to retrieve music-related metadata from several
  online providers (Amazon, Discogs, Musicbrainz...).
 
+Package: libglyr1-dbg
+Priority: extra
+Section: debug
+Architecture: any
+Depends: libglyr1 (= ${binary:Version}), ${misc:Depends}
+Description: search engine for music-related metadata - debugging symbols
+ Glyr is a library to retrieve music-related metadata from several
+ online providers (Amazon, Discogs, Musicbrainz...).
+ .
+ This package contains the debugging symbols.
+
 Package: libglyr-dev
 Section: libdevel
 Architecture: any

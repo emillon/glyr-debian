@@ -10,3 +10,6 @@ override_dh_compress:
 override_dh_fixperms:
 	chmod a-x debian/libglyr-dev/usr/share/doc/libglyr-dev/examples/async_queue.c
 	dh_fixperms
+	
+override_dh_strip:
+	dh_strip --dbg-package=libglyr1-dbg
