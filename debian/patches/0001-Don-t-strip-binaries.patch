@@ -1,0 +1,21 @@
+From: Etienne Millon <etienne.millon@gmail.com>
+Date: Sun, 1 Apr 2012 22:21:51 +0200
+Subject: Don't strip binaries
+
+---
+ CMakeLists.txt |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d78caec..d14eed6 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -57,7 +57,7 @@ ENDIF()
+ MESSAGE("-- Building Target: ${CMAKE_BUILD_TYPE}")
+ 
+ SET(COMMON_FLAGS "-Wall -Wextra -Wstrict-prototypes -std=c99 -W -Wno-unused-parameter -Wno-strict-prototypes")
+-SET(CMAKE_C_FLAGS_RELEASE "${COMMON_FLAGS} ${CMAKE_C_FLAGS} -Os -s")
++SET(CMAKE_C_FLAGS_RELEASE "${COMMON_FLAGS} ${CMAKE_C_FLAGS} -O2 -g")
+ SET(CMAKE_C_FLAGS_DEBUG   "${COMMON_FLAGS} ${CMAKE_C_FLAGS} -ggdb3")
+ SET(CMAKE_C_FLAGS "${COMMON_FLAGS} ${CMAKE_C_FLAGS}")
+ # ------------------------------------------------
