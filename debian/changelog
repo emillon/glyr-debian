@@ -1,5 +1,5 @@
-glyr (0.9.7-1) unstable; urgency=low
+glyr (0.9.8-1) unstable; urgency=low
 
   * Initial release (Closes: #651416).
 
- -- Etienne Millon <etienne.millon@gmail.com>  Sat, 10 Mar 2012 19:17:08 +0100
+ -- Etienne Millon <etienne.millon@gmail.com>  Sun, 01 Apr 2012 19:32:28 +0200
