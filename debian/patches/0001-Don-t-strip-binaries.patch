@@ -7,7 +7,7 @@ Subject: Don't strip binaries
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index d78caec..d14eed6 100644
+index d78caec..ea9d4cc 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -57,7 +57,7 @@ ENDIF()

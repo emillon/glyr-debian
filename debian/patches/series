@@ -1,1 +1,2 @@
 0001-Don-t-strip-binaries.patch
+0002-Allocate-strings-in-the-correct-heap.patch

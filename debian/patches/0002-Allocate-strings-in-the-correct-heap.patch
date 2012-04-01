@@ -1,0 +1,27 @@
+From: Etienne Millon <etienne.millon@gmail.com>
+Date: Sun, 1 Apr 2012 22:55:53 +0200
+Subject: Allocate strings in the correct heap
+
+curl_easy_escape returns a string allocated within libcurl. For consistency, it
+should be put in a glib-managed buffer to avoid a segfault at a later g_free.
+
+This patch copies the temporary buffer into a glib buffer.
+---
+ lib/stringlib.c |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
+
+diff --git a/lib/stringlib.c b/lib/stringlib.c
+index 4277130..e306011 100644
+--- a/lib/stringlib.c
++++ b/lib/stringlib.c
+@@ -314,7 +314,9 @@ gchar * prepare_string(const gchar * input, gboolean delintify, gboolean do_curl
+                 {
+                     if(do_curl_escape)
+                     {
+-                        result = curl_easy_escape(NULL,no_lint,0);
++                        char* m_result = curl_easy_escape(NULL,no_lint,0);
++                        result = g_strdup(m_result);
++                        curl_free(m_result);
+                     }
+                     else
+                     {
