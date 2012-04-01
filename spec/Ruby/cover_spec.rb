@@ -154,7 +154,7 @@ describe "cover" do
 		
 		it "should test a pagehit" do
 			@spit.artist = "Nirvana"
-			@spit.album  = "In Utero"
+			@spit.album  = "Smells Like Nirvana"
 			list = @spit.get
 
 			list.should be_an_instance_of Array
@@ -300,7 +300,7 @@ describe "cover" do
 			list = @spit.get
 
 			list.should be_an_instance_of Array
-			list.size.should equal 1
+			list.size.should == 1
 			list.first.should be_an_instance_of Glyros::GlyrMemCache
 
 			show_in_sxiv(list.first)
