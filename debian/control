@@ -5,7 +5,8 @@ Build-Depends: cmake,
                debhelper (>= 8.0.0),
                libcurl4-gnutls-dev | libcurl-dev,
                libglib2.0-dev,
-               libsqlite3-dev
+               libsqlite3-dev,
+               pandoc
 Standards-Version: 3.9.2
 Section: libs
 Homepage: http://github.com/sahib/glyr

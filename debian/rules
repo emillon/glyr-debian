@@ -13,3 +13,7 @@ override_dh_fixperms:
 	
 override_dh_strip:
 	dh_strip --dbg-package=libglyr1-dbg
+
+override_dh_auto_build:
+	dh_auto_build
+	pandoc -s -t man debian/glyrc.mdwn -o debian/glyrc.1
