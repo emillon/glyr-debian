@@ -16,4 +16,4 @@ override_dh_strip:
 
 override_dh_auto_build:
 	dh_auto_build
-	pandoc -s -t man debian/glyrc.mdwn -o debian/glyrc.1
+	pandoc -s -S -t man debian/glyrc.mdwn -o debian/glyrc.1
