@@ -6,6 +6,8 @@ curl_easy_escape returns a string allocated within libcurl. For consistency, it
 should be put in a glib-managed buffer to avoid a segfault at a later g_free.
 
 This patch copies the temporary buffer into a glib buffer.
+
+Applied-Upstream: commit:a0ef8214f90f9b69ecfb97ba27843d23767dd2b5
 ---
  lib/stringlib.c |    4 +++-
  1 files changed, 3 insertions(+), 1 deletions(-)
