@@ -53,4 +53,10 @@ Section: sound
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: command-line interface to libglyr
- <insert long description, indented with spaces>
+ Glyr is a library to retrieve music-related metadata from several
+ online providers (Amazon, Discogs, Musicbrainz...).
+ .
+ It can be used in media player programs to download cover art, lyrics,
+ biography and much more.
+ .
+ This package contains a command-line interface to the library.
