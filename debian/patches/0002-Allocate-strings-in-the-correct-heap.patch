@@ -10,10 +10,10 @@ This patch copies the temporary buffer into a glib buffer.
 Applied-Upstream: commit:a0ef8214f90f9b69ecfb97ba27843d23767dd2b5
 ---
  lib/stringlib.c |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/lib/stringlib.c b/lib/stringlib.c
-index 4277130..e306011 100644
+index 4277130..ec4d367 100644
 --- a/lib/stringlib.c
 +++ b/lib/stringlib.c
 @@ -314,7 +314,9 @@ gchar * prepare_string(const gchar * input, gboolean delintify, gboolean do_curl
