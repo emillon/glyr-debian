@@ -1,19 +1,4 @@
 libglyr.so.1 libglyr1 #MINVER#
- glyrFetcher_albumlist@Base 0.9.8
- glyrFetcher_artistbio@Base 0.9.8
- glyrFetcher_artistphotos@Base 0.9.8
- glyrFetcher_backdrops@Base 0.9.8
- glyrFetcher_cover@Base 0.9.8
- glyrFetcher_guitartabs@Base 0.9.8
- glyrFetcher_lyrics@Base 0.9.8
- glyrFetcher_relations@Base 0.9.8
- glyrFetcher_review@Base 0.9.8
- glyrFetcher_similar_song@Base 0.9.8
- glyrFetcher_similiar_artists@Base 0.9.8
- glyrFetcher_tags@Base 0.9.8
- glyrFetcher_tracklist@Base 0.9.8
- glyrMetaDataPluginList@Base 0.9.8
- glyrMetaDataSourceList@Base 0.9.8
  glyr_cache_copy@Base 0.9.8
  glyr_cache_free@Base 0.9.8
  glyr_cache_new@Base 0.9.8
@@ -45,7 +30,6 @@ libglyr.so.1 libglyr1 #MINVER#
  glyr_info_free@Base 0.9.8
  glyr_info_get@Base 0.9.8
  glyr_init@Base 0.9.8
- glyr_internal_log@Base 0.9.8
  glyr_md5sum_to_string@Base 0.9.8
  glyr_message@Base 0.9.8
  glyr_opt_album@Base 0.9.8
@@ -75,7 +59,6 @@ libglyr.so.1 libglyr1 #MINVER#
  glyr_opt_type@Base 0.9.8
  glyr_opt_useragent@Base 0.9.8
  glyr_opt_verbosity@Base 0.9.8
- glyr_puts@Base 0.9.8
  glyr_query_destroy@Base 0.9.8
  glyr_query_init@Base 0.9.8
  glyr_signal_exit@Base 0.9.8
