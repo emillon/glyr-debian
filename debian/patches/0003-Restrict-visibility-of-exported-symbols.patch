@@ -12,8 +12,9 @@ This patch does two things :
 ---
  CMakeLists.txt |    2 +-
  lib/cache.c    |    9 +++++++++
- lib/glyr.c     |   52 ++++++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 62 insertions(+), 1 deletion(-)
+ lib/glyr.c     |   56 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ lib/testing.c  |    2 ++
+ 4 files changed, 68 insertions(+), 1 deletion(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index ea9d4cc..e034b04 100644
@@ -105,7 +106,7 @@ index d3db05d..d619c3b 100644
  {
      GlyrMemCache * c = glyr_cache_new();
 diff --git a/lib/glyr.c b/lib/glyr.c
-index 321f5f6..686cce3 100644
+index 321f5f6..4402cb5 100644
 --- a/lib/glyr.c
 +++ b/lib/glyr.c
 @@ -197,6 +197,7 @@ static void set_query_on_defaults(GlyrQuery * glyrs);
@@ -460,7 +461,15 @@ index 321f5f6..686cce3 100644
  const char * glyr_get_type_to_string(GLYR_GET_TYPE type)
  {
      const gchar * result = "unknown";
-@@ -1046,6 +1090,7 @@ const char * glyr_data_type_to_string(GLYR_DATA_TYPE type)
+@@ -1033,6 +1077,7 @@ const char * glyr_get_type_to_string(GLYR_GET_TYPE type)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ const char * glyr_data_type_to_string(GLYR_DATA_TYPE type)
+ {
+     if(type > 0 && type < (sizeof(type_strings)/sizeof(const char*)))
+@@ -1046,6 +1091,7 @@ const char * glyr_data_type_to_string(GLYR_DATA_TYPE type)
  }
  /*-----------------------------------------------*/
  
@@ -468,7 +477,7 @@ index 321f5f6..686cce3 100644
  void glyr_cache_print(GlyrMemCache * cacheditem)
  {
      if(cacheditem != NULL)
-@@ -1092,6 +1137,7 @@ void glyr_cache_print(GlyrMemCache * cacheditem)
+@@ -1092,6 +1138,7 @@ void glyr_cache_print(GlyrMemCache * cacheditem)
  
  /* --------------------------------------------------------- */
  
@@ -476,7 +485,7 @@ index 321f5f6..686cce3 100644
  GlyrFetcherInfo * glyr_info_get(void)
  {
      return get_plugin_info();
-@@ -1099,6 +1145,7 @@ GlyrFetcherInfo * glyr_info_get(void)
+@@ -1099,6 +1146,7 @@ GlyrFetcherInfo * glyr_info_get(void)
  
  /* --------------------------------------------------------- */
  
@@ -484,7 +493,31 @@ index 321f5f6..686cce3 100644
  void glyr_info_free(GlyrFetcherInfo * info)
  {
      free_plugin_info(info);
-@@ -1177,6 +1224,7 @@ GLYR_FIELD_REQUIREMENT glyr_get_requirements(GLYR_GET_TYPE type)
+@@ -1106,6 +1154,7 @@ void glyr_info_free(GlyrFetcherInfo * info)
+ 
+ /* --------------------------------------------------------- */
+ 
++__attribute__((visibility("default")))
+ char * glyr_md5sum_to_string(unsigned char * md5sum)
+ {
+     gchar * md5str = NULL;
+@@ -1127,6 +1176,7 @@ char * glyr_md5sum_to_string(unsigned char * md5sum)
+ 
+ #define CHAR_TO_NUM(c) (unsigned char)(g_ascii_isdigit(c) ? c - '0' : (c - 'a') + 10)
+ 
++__attribute__((visibility("default")))
+ void glyr_string_to_md5sum(const char * string, unsigned char * md5sum)
+ {
+     if(string != NULL && strlen(string) >= 32 && md5sum)
+@@ -1142,6 +1192,7 @@ void glyr_string_to_md5sum(const char * string, unsigned char * md5sum)
+ 
+ /* --------------------------------------------------------- */
+ 
++__attribute__((visibility("default")))
+ GLYR_FIELD_REQUIREMENT glyr_get_requirements(GLYR_GET_TYPE type)
+ {
+     GLYR_FIELD_REQUIREMENT result = 0;
+@@ -1177,6 +1228,7 @@ GLYR_FIELD_REQUIREMENT glyr_get_requirements(GLYR_GET_TYPE type)
  
  /* --------------------------------------------------------- */
  
@@ -492,7 +525,7 @@ index 321f5f6..686cce3 100644
  void glyr_cache_set_dsrc(GlyrMemCache * cache, const char * download_source)
  {
      SET_CACHE_STRING(cache,cache->dsrc,download_source);
-@@ -1184,6 +1232,7 @@ void glyr_cache_set_dsrc(GlyrMemCache * cache, const char * download_source)
+@@ -1184,6 +1236,7 @@ void glyr_cache_set_dsrc(GlyrMemCache * cache, const char * download_source)
  
  /* --------------------------------------------------------- */
  
@@ -500,7 +533,7 @@ index 321f5f6..686cce3 100644
  void glyr_cache_set_prov(GlyrMemCache * cache, const char * provider)
  {
      SET_CACHE_STRING(cache,cache->prov,provider);
-@@ -1191,6 +1240,7 @@ void glyr_cache_set_prov(GlyrMemCache * cache, const char * provider)
+@@ -1191,6 +1244,7 @@ void glyr_cache_set_prov(GlyrMemCache * cache, const char * provider)
  
  /* --------------------------------------------------------- */
  
@@ -508,7 +541,7 @@ index 321f5f6..686cce3 100644
  void glyr_cache_set_img_format(GlyrMemCache * cache, const char * img_format)
  {
      SET_CACHE_STRING(cache,cache->img_format,img_format);
-@@ -1198,6 +1248,7 @@ void glyr_cache_set_img_format(GlyrMemCache * cache, const char * img_format)
+@@ -1198,6 +1252,7 @@ void glyr_cache_set_img_format(GlyrMemCache * cache, const char * img_format)
  
  /* --------------------------------------------------------- */
  
@@ -516,7 +549,7 @@ index 321f5f6..686cce3 100644
  void glyr_cache_set_type(GlyrMemCache * cache, GLYR_DATA_TYPE type)
  {
      if(cache != NULL)
-@@ -1206,6 +1257,7 @@ void glyr_cache_set_type(GlyrMemCache * cache, GLYR_DATA_TYPE type)
+@@ -1206,6 +1261,7 @@ void glyr_cache_set_type(GlyrMemCache * cache, GLYR_DATA_TYPE type)
  
  /* --------------------------------------------------------- */
  
@@ -524,3 +557,23 @@ index 321f5f6..686cce3 100644
  void glyr_cache_set_rating(GlyrMemCache * cache, int rating)
  {
      if(cache != NULL)
+diff --git a/lib/testing.c b/lib/testing.c
+index ba43a0a..6039508 100644
+--- a/lib/testing.c
++++ b/lib/testing.c
+@@ -51,6 +51,7 @@ static MetaDataSource * get_metadata_struct(const char * provider_name, GLYR_GET
+ 
+ /*-----------------------------------*/
+ 
++__attribute__((visibility("default")))
+ const char * glyr_testing_call_url(const char * provider_name, GLYR_GET_TYPE type, GlyrQuery * query)
+ {
+     const char * result = NULL;
+@@ -76,6 +77,7 @@ const char * glyr_testing_call_url(const char * provider_name, GLYR_GET_TYPE typ
+ 
+ /*-----------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GlyrMemCache * glyr_testing_call_parser(const char * provider_name, GLYR_GET_TYPE type, GlyrQuery * query, GlyrMemCache * cache)
+ {
+     GlyrMemCache * result = NULL;
