@@ -1,0 +1,18 @@
+From: Etienne Millon <etienne.millon@gmail.com>
+Date: Tue, 1 May 2012 20:35:52 +0200
+Subject: Link stringlib
+
+---
+ src/CMakeLists.txt |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index dbd431a..f138b89 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-ADD_EXECUTABLE(glyrc glyrc/glyrc.c glyrc/autohelp.c glyrc/update.c)
++ADD_EXECUTABLE(glyrc glyrc/glyrc.c glyrc/autohelp.c glyrc/update.c ../lib/stringlib.c)
+ TARGET_LINK_LIBRARIES(glyrc glyr)
+ 
+ ADD_EXECUTABLE(example examples/example.c)
