@@ -12,7 +12,7 @@ index dbd431a..38b46d1 100644
 +++ b/src/CMakeLists.txt
 @@ -1,4 +1,4 @@
 -ADD_EXECUTABLE(glyrc glyrc/glyrc.c glyrc/autohelp.c glyrc/update.c)
-+ADD_EXECUTABLE(glyrc glyrc/glyrc.c glyrc/autohelp.c glyrc/update.c ../lib/stringlib.c ../lib/core.c ../lib/blacklist.c)
++ADD_EXECUTABLE(glyrc glyrc/glyrc.c glyrc/autohelp.c glyrc/update.c ../lib/stringlib.c ../lib/core.c ../lib/blacklist.c ../lib/cache_intern.c)
  TARGET_LINK_LIBRARIES(glyrc glyr)
  
  ADD_EXECUTABLE(example examples/example.c)
