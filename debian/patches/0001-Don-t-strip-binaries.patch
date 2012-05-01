@@ -4,7 +4,7 @@ Subject: Don't strip binaries
 
 ---
  CMakeLists.txt |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index d78caec..ea9d4cc 100644

@@ -1,0 +1,677 @@
+From: Etienne Millon <etienne.millon@gmail.com>
+Date: Mon, 23 Apr 2012 21:30:48 +0200
+Subject: Restrict visibility of exported symbols
+
+By default, GCC makes every symbol in the .so visible. However, to avoid clashes
+and maintain a clear API it is better to export only a whitelist.
+
+This patch does two things and a hack :
+
+  - set the default visibility to "hidden".
+  - annotate some exported functions to "default", ie. externally visible.
+
+  - (the hack) adjust src/glyrc/autohelp.c so that it links directly against
+    stringlib objects (instead of linking through libglyr)
+
+The last point is certainly questionable. The problem is that a few functions
+from stringlib are referenced in autohelp.c. An alternative solution could be to
+rename get_next_word into glyr_get_next_word and make it part of the public API,
+but that's not ideal either.
+---
+ CMakeLists.txt       |    2 +-
+ lib/cache.c          |    9 +++++++
+ lib/glyr.c           |   56 +++++++++++++++++++++++++++++++++++++++++
+ lib/testing.c        |    2 ++
+ src/CMakeLists.txt   |    2 +-
+ src/glyrc/autohelp.c |   67 --------------------------------------------------
+ 6 files changed, 69 insertions(+), 69 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ea9d4cc..e034b04 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -56,7 +56,7 @@ ELSE()
+ ENDIF()
+ MESSAGE("-- Building Target: ${CMAKE_BUILD_TYPE}")
+ 
+-SET(COMMON_FLAGS "-Wall -Wextra -Wstrict-prototypes -std=c99 -W -Wno-unused-parameter -Wno-strict-prototypes")
++SET(COMMON_FLAGS "-Wall -Wextra -Wstrict-prototypes -std=c99 -W -Wno-unused-parameter -Wno-strict-prototypes -fvisibility=hidden")
+ SET(CMAKE_C_FLAGS_RELEASE "${COMMON_FLAGS} ${CMAKE_C_FLAGS} -O2 -g")
+ SET(CMAKE_C_FLAGS_DEBUG   "${COMMON_FLAGS} ${CMAKE_C_FLAGS} -ggdb3")
+ SET(CMAKE_C_FLAGS "${COMMON_FLAGS} ${CMAKE_C_FLAGS}")
+diff --git a/lib/cache.c b/lib/cache.c
+index d3db05d..d619c3b 100644
+--- a/lib/cache.c
++++ b/lib/cache.c
+@@ -292,6 +292,7 @@ typedef struct
+ ////////////////////////////////////////////////////////
+ ////////////////////////////////////////////////////////
+ 
++__attribute__((visibility("default")))
+ GlyrDatabase * glyr_db_init(const char * root_path)
+ {
+     GlyrDatabase * to_return = NULL;
+@@ -360,6 +361,7 @@ GlyrDatabase * glyr_db_init(const char * root_path)
+ ////////////////////////////////////
+ 
+ 
++__attribute__((visibility("default")))
+ void glyr_db_destroy(GlyrDatabase * db_object)
+ {
+     if(db_object != NULL)
+@@ -381,6 +383,7 @@ void glyr_db_destroy(GlyrDatabase * db_object)
+ ////////////////////////////////////
+ ////////////////////////////////////
+ 
++__attribute__((visibility("default")))
+ int glyr_db_edit(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache * edited)
+ {
+     int result = 0;
+@@ -402,6 +405,7 @@ int glyr_db_edit(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache * edited)
+ ////////////////////////////////////
+ ////////////////////////////////////
+ 
++__attribute__((visibility("default")))
+ void glyr_db_replace(GlyrDatabase * db, unsigned char * md5sum, GlyrQuery * query, GlyrMemCache * data)
+ {
+     if(db != NULL && md5sum != NULL) 
+@@ -430,6 +434,7 @@ void glyr_db_replace(GlyrDatabase * db, unsigned char * md5sum, GlyrQuery * quer
+ ////////////////////////////////////
+ 
+ 
++__attribute__((visibility("default")))
+ gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
+ {
+     gint result = 0;
+@@ -530,6 +535,7 @@ gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
+ ////////////////////////////////////
+ 
+ 
++__attribute__((visibility("default")))
+ void glyr_db_foreach(GlyrDatabase * db, glyr_foreach_callback cb, void * userptr)
+ {
+     if(db != NULL && cb != NULL)
+@@ -561,6 +567,7 @@ void glyr_db_foreach(GlyrDatabase * db, glyr_foreach_callback cb, void * userptr
+ ////////////////////////////////////
+ ////////////////////////////////////
+ 
++__attribute__((visibility("default")))
+ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
+ {
+     GlyrMemCache * result = NULL;
+@@ -662,6 +669,7 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
+ ////////////////////////////////////
+ 
+ 
++__attribute__((visibility("default")))
+ void glyr_db_insert(GlyrDatabase * db, GlyrQuery * q, GlyrMemCache * cache)
+ {
+     if(db && q && cache)
+@@ -694,6 +702,7 @@ rollback:
+ ////////////////////////////////////
+ ////////////////////////////////////
+ 
++__attribute__((visibility("default")))
+ GlyrMemCache * glyr_db_make_dummy(void)
+ {
+     GlyrMemCache * c = glyr_cache_new();
+diff --git a/lib/glyr.c b/lib/glyr.c
+index 321f5f6..4402cb5 100644
+--- a/lib/glyr.c
++++ b/lib/glyr.c
+@@ -197,6 +197,7 @@ static void set_query_on_defaults(GlyrQuery * glyrs);
+ /*--------------------------------------------------------*/
+ 
+ // return a descriptive string on error ID
++__attribute__((visibility("default")))
+ const char * glyr_strerror(GLYR_ERROR ID)
+ {
+     if(ID < (sizeof(err_strings)/sizeof(const char *)))
+@@ -208,6 +209,7 @@ const char * glyr_strerror(GLYR_ERROR ID)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ void glyr_signal_exit(GlyrQuery * query)
+ {
+     SET_ATOMIC_SIGNAL_EXIT(query,1);
+@@ -215,6 +217,7 @@ void glyr_signal_exit(GlyrQuery * query)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ void glyr_cache_update_md5sum(GlyrMemCache * cache)
+ {
+     update_md5sum(cache);
+@@ -222,6 +225,7 @@ void glyr_cache_update_md5sum(GlyrMemCache * cache)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ void glyr_cache_set_data(GlyrMemCache * cache, const char * data, int len)
+ {
+     DL_set_data(cache,data,len);
+@@ -229,6 +233,7 @@ void glyr_cache_set_data(GlyrMemCache * cache, const char * data, int len)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GlyrMemCache * glyr_cache_copy(GlyrMemCache * cache)
+ {
+     return DL_copy(cache);
+@@ -236,6 +241,7 @@ GlyrMemCache * glyr_cache_copy(GlyrMemCache * cache)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ const char * glyr_version(void)
+ {
+     return "Version "GLYR_VERSION_MAJOR"."GLYR_VERSION_MINOR"."GLYR_VERSION_MICRO" ("GLYR_VERSION_NAME") of ["__DATE__"] compiled at ["__TIME__"]";
+@@ -246,6 +252,7 @@ const char * glyr_version(void)
+ /*-----------------------------------------------*/
+ 
+ // Seperate method because va_arg struggles with function pointers
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_dlcallback(GlyrQuery * settings, DL_callback dl_cb, void * userp)
+ {
+     if(settings)
+@@ -259,6 +266,7 @@ GLYR_ERROR glyr_opt_dlcallback(GlyrQuery * settings, DL_callback dl_cb, void * u
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_type(GlyrQuery * s, GLYR_GET_TYPE type)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -272,6 +280,7 @@ GLYR_ERROR glyr_opt_type(GlyrQuery * s, GLYR_GET_TYPE type)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_artist(GlyrQuery * s, char * artist)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -281,6 +290,7 @@ GLYR_ERROR glyr_opt_artist(GlyrQuery * s, char * artist)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_album(GlyrQuery * s, char * album)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -290,6 +300,7 @@ GLYR_ERROR glyr_opt_album(GlyrQuery * s, char * album)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_title(GlyrQuery * s, char * title)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -317,6 +328,7 @@ static int size_set(int * ref, int size)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_img_maxsize(GlyrQuery * s, int size)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -325,6 +337,7 @@ GLYR_ERROR glyr_opt_img_maxsize(GlyrQuery * s, int size)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_img_minsize(GlyrQuery * s, int size)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -333,6 +346,7 @@ GLYR_ERROR glyr_opt_img_minsize(GlyrQuery * s, int size)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_parallel(GlyrQuery * s, unsigned long val)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -342,6 +356,7 @@ GLYR_ERROR glyr_opt_parallel(GlyrQuery * s, unsigned long val)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_timeout(GlyrQuery * s, unsigned long val)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -351,6 +366,7 @@ GLYR_ERROR glyr_opt_timeout(GlyrQuery * s, unsigned long val)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_redirects(GlyrQuery * s, unsigned long val)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -360,6 +376,7 @@ GLYR_ERROR glyr_opt_redirects(GlyrQuery * s, unsigned long val)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_useragent(GlyrQuery * s, const char * useragent)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -369,6 +386,7 @@ GLYR_ERROR glyr_opt_useragent(GlyrQuery * s, const char * useragent)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_lang(GlyrQuery * s, char * langcode)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -391,6 +409,7 @@ GLYR_ERROR glyr_opt_lang(GlyrQuery * s, char * langcode)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_lang_aware_only(GlyrQuery * s, bool lang_aware_only)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -400,6 +419,7 @@ GLYR_ERROR glyr_opt_lang_aware_only(GlyrQuery * s, bool lang_aware_only)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_number(GlyrQuery * s, unsigned int num)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -409,6 +429,7 @@ GLYR_ERROR glyr_opt_number(GlyrQuery * s, unsigned int num)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_verbosity(GlyrQuery * s, unsigned int level)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -418,6 +439,7 @@ GLYR_ERROR glyr_opt_verbosity(GlyrQuery * s, unsigned int level)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_from(GlyrQuery * s, const char * from)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -431,6 +453,7 @@ GLYR_ERROR glyr_opt_from(GlyrQuery * s, const char * from)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_allowed_formats(GlyrQuery * s, const char * formats)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -440,6 +463,7 @@ GLYR_ERROR glyr_opt_allowed_formats(GlyrQuery * s, const char * formats)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_musictree_path(GlyrQuery * s, const char * musictree_path)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -449,6 +473,7 @@ GLYR_ERROR glyr_opt_musictree_path(GlyrQuery * s, const char * musictree_path)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_plugmax(GlyrQuery * s, int plugmax)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -463,6 +488,7 @@ GLYR_ERROR glyr_opt_plugmax(GlyrQuery * s, int plugmax)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_qsratio(GlyrQuery * s, float ratio)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -472,6 +498,7 @@ GLYR_ERROR glyr_opt_qsratio(GlyrQuery * s, float ratio)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_proxy(GlyrQuery * s, const char * proxystring)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -481,6 +508,7 @@ GLYR_ERROR glyr_opt_proxy(GlyrQuery * s, const char * proxystring)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_fuzzyness(GlyrQuery * s, int fuzz)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -490,6 +518,7 @@ GLYR_ERROR glyr_opt_fuzzyness(GlyrQuery * s, int fuzz)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_download(GlyrQuery * s, bool download)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -499,6 +528,7 @@ GLYR_ERROR glyr_opt_download(GlyrQuery * s, bool download)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_force_utf8(GlyrQuery * s, bool force_utf8)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -508,6 +538,7 @@ GLYR_ERROR glyr_opt_force_utf8(GlyrQuery * s, bool force_utf8)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_lookup_db(GlyrQuery * s, GlyrDatabase * db)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -521,6 +552,7 @@ GLYR_ERROR glyr_opt_lookup_db(GlyrQuery * s, GlyrDatabase * db)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_db_autowrite(GlyrQuery * s, bool db_autowrite)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -530,6 +562,7 @@ GLYR_ERROR glyr_opt_db_autowrite(GlyrQuery * s, bool db_autowrite)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GLYR_ERROR glyr_opt_db_autoread(GlyrQuery * s, bool db_autoread)
+ {
+     if(s == NULL) return GLYRE_EMPTY_STRUCT;
+@@ -590,6 +623,7 @@ static void set_query_on_defaults(GlyrQuery * glyrs)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ void glyr_query_init(GlyrQuery * glyrs)
+ {
+     if(glyrs != NULL)
+@@ -600,6 +634,7 @@ void glyr_query_init(GlyrQuery * glyrs)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ void glyr_query_destroy(GlyrQuery * sets)
+ {
+     if(sets != NULL && QUERY_IS_INITALIZED(sets))
+@@ -621,6 +656,7 @@ void glyr_query_destroy(GlyrQuery * sets)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GlyrMemCache * glyr_download(const char * url, GlyrQuery * s)
+ {
+     return download_single(url,s,NULL);
+@@ -628,6 +664,7 @@ GlyrMemCache * glyr_download(const char * url, GlyrQuery * s)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ void glyr_free_list(GlyrMemCache * head)
+ {
+     if(head != NULL)
+@@ -653,6 +690,7 @@ void glyr_free_list(GlyrMemCache * head)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ void glyr_cache_free(GlyrMemCache * c)
+ {
+     DL_free(c);
+@@ -660,6 +698,7 @@ void glyr_cache_free(GlyrMemCache * c)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GlyrMemCache * glyr_cache_new(void)
+ {
+     return DL_init();
+@@ -668,6 +707,7 @@ GlyrMemCache * glyr_cache_new(void)
+ /*-----------------------------------------------*/
+ 
+ // !! NOT THREADSAFE !! //
++__attribute__((visibility("default")))
+ void glyr_init(void)
+ {
+     /* Protect agains double initialization */
+@@ -706,6 +746,7 @@ void glyr_init(void)
+ /*-----------------------------------------------*/
+ 
+ // !! NOT THREADSAFE !! //
++__attribute__((visibility("default")))
+ void glyr_cleanup(void)
+ {
+     if(is_initalized == TRUE)
+@@ -779,6 +820,7 @@ static gboolean check_if_valid(GlyrQuery * q, MetaDataFetcher * fetch)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GlyrMemCache * glyr_get(GlyrQuery * settings, GLYR_ERROR * e, int * length)
+ {
+     if(is_initalized == FALSE || QUERY_IS_INITALIZED(settings) == FALSE)
+@@ -920,6 +962,7 @@ GlyrMemCache * glyr_get(GlyrQuery * settings, GLYR_ERROR * e, int * length)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ int glyr_cache_write(GlyrMemCache * data, const char * path)
+ {
+     int bytes = -1;
+@@ -1014,6 +1057,7 @@ static int glyr_set_info(GlyrQuery * s, int at, const char * arg)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ const char * glyr_get_type_to_string(GLYR_GET_TYPE type)
+ {
+     const gchar * result = "unknown";
+@@ -1033,6 +1077,7 @@ const char * glyr_get_type_to_string(GLYR_GET_TYPE type)
+ 
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ const char * glyr_data_type_to_string(GLYR_DATA_TYPE type)
+ {
+     if(type > 0 && type < (sizeof(type_strings)/sizeof(const char*)))
+@@ -1046,6 +1091,7 @@ const char * glyr_data_type_to_string(GLYR_DATA_TYPE type)
+ }
+ /*-----------------------------------------------*/
+ 
++__attribute__((visibility("default")))
+ void glyr_cache_print(GlyrMemCache * cacheditem)
+ {
+     if(cacheditem != NULL)
+@@ -1092,6 +1138,7 @@ void glyr_cache_print(GlyrMemCache * cacheditem)
+ 
+ /* --------------------------------------------------------- */
+ 
++__attribute__((visibility("default")))
+ GlyrFetcherInfo * glyr_info_get(void)
+ {
+     return get_plugin_info();
+@@ -1099,6 +1146,7 @@ GlyrFetcherInfo * glyr_info_get(void)
+ 
+ /* --------------------------------------------------------- */
+ 
++__attribute__((visibility("default")))
+ void glyr_info_free(GlyrFetcherInfo * info)
+ {
+     free_plugin_info(info);
+@@ -1106,6 +1154,7 @@ void glyr_info_free(GlyrFetcherInfo * info)
+ 
+ /* --------------------------------------------------------- */
+ 
++__attribute__((visibility("default")))
+ char * glyr_md5sum_to_string(unsigned char * md5sum)
+ {
+     gchar * md5str = NULL;
+@@ -1127,6 +1176,7 @@ char * glyr_md5sum_to_string(unsigned char * md5sum)
+ 
+ #define CHAR_TO_NUM(c) (unsigned char)(g_ascii_isdigit(c) ? c - '0' : (c - 'a') + 10)
+ 
++__attribute__((visibility("default")))
+ void glyr_string_to_md5sum(const char * string, unsigned char * md5sum)
+ {
+     if(string != NULL && strlen(string) >= 32 && md5sum)
+@@ -1142,6 +1192,7 @@ void glyr_string_to_md5sum(const char * string, unsigned char * md5sum)
+ 
+ /* --------------------------------------------------------- */
+ 
++__attribute__((visibility("default")))
+ GLYR_FIELD_REQUIREMENT glyr_get_requirements(GLYR_GET_TYPE type)
+ {
+     GLYR_FIELD_REQUIREMENT result = 0;
+@@ -1177,6 +1228,7 @@ GLYR_FIELD_REQUIREMENT glyr_get_requirements(GLYR_GET_TYPE type)
+ 
+ /* --------------------------------------------------------- */
+ 
++__attribute__((visibility("default")))
+ void glyr_cache_set_dsrc(GlyrMemCache * cache, const char * download_source)
+ {
+     SET_CACHE_STRING(cache,cache->dsrc,download_source);
+@@ -1184,6 +1236,7 @@ void glyr_cache_set_dsrc(GlyrMemCache * cache, const char * download_source)
+ 
+ /* --------------------------------------------------------- */
+ 
++__attribute__((visibility("default")))
+ void glyr_cache_set_prov(GlyrMemCache * cache, const char * provider)
+ {
+     SET_CACHE_STRING(cache,cache->prov,provider);
+@@ -1191,6 +1244,7 @@ void glyr_cache_set_prov(GlyrMemCache * cache, const char * provider)
+ 
+ /* --------------------------------------------------------- */
+ 
++__attribute__((visibility("default")))
+ void glyr_cache_set_img_format(GlyrMemCache * cache, const char * img_format)
+ {
+     SET_CACHE_STRING(cache,cache->img_format,img_format);
+@@ -1198,6 +1252,7 @@ void glyr_cache_set_img_format(GlyrMemCache * cache, const char * img_format)
+ 
+ /* --------------------------------------------------------- */
+ 
++__attribute__((visibility("default")))
+ void glyr_cache_set_type(GlyrMemCache * cache, GLYR_DATA_TYPE type)
+ {
+     if(cache != NULL)
+@@ -1206,6 +1261,7 @@ void glyr_cache_set_type(GlyrMemCache * cache, GLYR_DATA_TYPE type)
+ 
+ /* --------------------------------------------------------- */
+ 
++__attribute__((visibility("default")))
+ void glyr_cache_set_rating(GlyrMemCache * cache, int rating)
+ {
+     if(cache != NULL)
+diff --git a/lib/testing.c b/lib/testing.c
+index ba43a0a..6039508 100644
+--- a/lib/testing.c
++++ b/lib/testing.c
+@@ -51,6 +51,7 @@ static MetaDataSource * get_metadata_struct(const char * provider_name, GLYR_GET
+ 
+ /*-----------------------------------*/
+ 
++__attribute__((visibility("default")))
+ const char * glyr_testing_call_url(const char * provider_name, GLYR_GET_TYPE type, GlyrQuery * query)
+ {
+     const char * result = NULL;
+@@ -76,6 +77,7 @@ const char * glyr_testing_call_url(const char * provider_name, GLYR_GET_TYPE typ
+ 
+ /*-----------------------------------*/
+ 
++__attribute__((visibility("default")))
+ GlyrMemCache * glyr_testing_call_parser(const char * provider_name, GLYR_GET_TYPE type, GlyrQuery * query, GlyrMemCache * cache)
+ {
+     GlyrMemCache * result = NULL;
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index dbd431a..a28a02e 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-ADD_EXECUTABLE(glyrc glyrc/glyrc.c glyrc/autohelp.c glyrc/update.c)
++ADD_EXECUTABLE(glyrc glyrc/glyrc.c glyrc/autohelp.c glyrc/update.c ../lib/stringlib.c ../lib/core.c ../lib/blacklist.c ../lib/cache_intern.c)
+ TARGET_LINK_LIBRARIES(glyrc glyr)
+ 
+ ADD_EXECUTABLE(example examples/example.c)
+diff --git a/src/glyrc/autohelp.c b/src/glyrc/autohelp.c
+index 002461f..c47a349 100644
+--- a/src/glyrc/autohelp.c
++++ b/src/glyrc/autohelp.c
+@@ -23,73 +23,6 @@
+ 
+ #include "../../lib/stringlib.h"
+ 
+-/* Copied from lib/stringlib.c - more details there */
+-gsize levenshtein_strcmp(const gchar * s, const gchar * t)
+-{
+- 	 /* Get strlen */
+-    int n = (s) ? strlen(s)+1 : 0;
+-    int m = (t) ? strlen(t)+1 : 0;
+-
+-    /* Nothing to compute really */
+-    if (n == 0) return m;
+-    if (m == 0) return n;
+-
+-    /* String matrix */
+-    int d[n][m];
+-    int i,j;
+-
+-    /* Init first row|column to 0...n|m */
+-    for (i = 0; i < n; i++) d[i][0] = i;
+-    for (j = 0; j < m; j++) d[0][j] = j;
+-
+-    for (i = 1; i < n; i++)
+-    {
+-        /* Current char in string s */
+-        char cats = s[i-1];
+-
+-        for (j = 1; j < m; j++)
+-        {
+-            /* Do -1 only once */
+-            int jm1 = j-1,
+-                im1 = i-1;
+-
+-            /* a = above cell, b = left cell, c = left above cell */
+-            int a = d[im1][j] + 1,
+-                b = d[i][jm1] + 1,
+-                c = d[im1][jm1] + (t[jm1] != cats);
+-
+-            /* Now compute the minimum of a,b,c and set MIN(a,b,c) to cell d[i][j] */
+- 	    d[i][j] = (a < b) ? MIN(a,c) : MIN(b,c);
+-        }
+-    }
+-
+-    /* The result is stored in the very right down cell */
+-    return d[n-1][m-1];
+-}
+-
+-/* ------------------------------------------------------------- */
+-
+-gsize levenshtein_strcasecmp(const gchar * string, const gchar * other)
+-{
+-	gsize diff = 100;
+-	if(string != NULL && other != NULL)
+-	{
+-		/* Lowercase UTF8 string might have more or less bytes! */
+-		gchar * lower_string = g_ascii_strdown(string,-1);
+-		gchar * lower_other  = g_ascii_strdown(other, -1);
+-
+-		if(lower_string && lower_other)
+-		{
+-			diff = levenshtein_strcmp(lower_string, lower_other);
+-		}
+-
+-		/* Free 'em */
+-		g_free(lower_string);
+-		g_free(lower_other);
+-	}
+-	return diff;
+-}
+-
+ /* ------------------------------------------------------------- */
+ 
+ void suggest_other_getter(GlyrQuery * query, const char * wrong_input)

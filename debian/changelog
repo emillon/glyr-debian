@@ -4,5 +4,6 @@ glyr (0.9.8-1) unstable; urgency=low
   * Patches:
     - Set correct build flags (-O2 -g)
     - Fix a memory allocation bug
+    - Restrict symbols visibility
 
- -- Etienne Millon <etienne.millon@gmail.com>  Sun, 01 Apr 2012 23:00:21 +0200
+ -- Etienne Millon <etienne.millon@gmail.com>  Mon, 23 Apr 2012 22:23:26 +0200
