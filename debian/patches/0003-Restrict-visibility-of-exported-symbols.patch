@@ -15,8 +15,8 @@ This patch does three things :
  lib/cache.c          |    9 ++++++++
  lib/glyr.c           |   56 ++++++++++++++++++++++++++++++++++++++++++++++++++
  lib/testing.c        |    2 ++
- src/glyrc/autohelp.c |   28 +++++++++++++++++++++++++
- 5 files changed, 96 insertions(+), 1 deletion(-)
+ src/glyrc/autohelp.c |   44 ---------------------------------------
+ 5 files changed, 68 insertions(+), 45 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index ea9d4cc..e034b04 100644
@@ -580,41 +580,57 @@ index ba43a0a..6039508 100644
  {
      GlyrMemCache * result = NULL;
 diff --git a/src/glyrc/autohelp.c b/src/glyrc/autohelp.c
-index 002461f..4fa3838 100644
+index 002461f..b2e73c5 100644
 --- a/src/glyrc/autohelp.c
 +++ b/src/glyrc/autohelp.c
-@@ -67,6 +67,34 @@ gsize levenshtein_strcmp(const gchar * s, const gchar * t)
-     return d[n-1][m-1];
- }
+@@ -23,50 +23,6 @@
  
-+/* Copied from lib/stringlib.c - more details there */
-+static gchar * get_next_word(const gchar * string, const gchar * delim, gsize *offset, gsize len)
-+{
-+    gchar * word = NULL;
-+    if(string && delim && *(offset) < len)
-+    {
-+        gchar * occurence = strstr(string+(*offset),delim);
-+        if(occurence)
-+        {
-+            word=copy_value(string+(*offset),occurence);
-+            *(offset) += (1 + occurence - (string + *(offset)));
-+        }
-+        else
-+        {
-+            word=copy_value(string+(*offset),string+len);
-+            *(offset) = len;
-+        }
-+    }
-+    if(word)
-+    {
-+        gchar * trim = g_malloc0(len + 1);
-+        trim_copy(word,trim);
-+        free(word);
-+        word = trim;
-+    }
-+    return word;
-+}
-+
+ #include "../../lib/stringlib.h"
+ 
+-/* Copied from lib/stringlib.c - more details there */
+-gsize levenshtein_strcmp(const gchar * s, const gchar * t)
+-{
+- 	 /* Get strlen */
+-    int n = (s) ? strlen(s)+1 : 0;
+-    int m = (t) ? strlen(t)+1 : 0;
+-
+-    /* Nothing to compute really */
+-    if (n == 0) return m;
+-    if (m == 0) return n;
+-
+-    /* String matrix */
+-    int d[n][m];
+-    int i,j;
+-
+-    /* Init first row|column to 0...n|m */
+-    for (i = 0; i < n; i++) d[i][0] = i;
+-    for (j = 0; j < m; j++) d[0][j] = j;
+-
+-    for (i = 1; i < n; i++)
+-    {
+-        /* Current char in string s */
+-        char cats = s[i-1];
+-
+-        for (j = 1; j < m; j++)
+-        {
+-            /* Do -1 only once */
+-            int jm1 = j-1,
+-                im1 = i-1;
+-
+-            /* a = above cell, b = left cell, c = left above cell */
+-            int a = d[im1][j] + 1,
+-                b = d[i][jm1] + 1,
+-                c = d[im1][jm1] + (t[jm1] != cats);
+-
+-            /* Now compute the minimum of a,b,c and set MIN(a,b,c) to cell d[i][j] */
+- 	    d[i][j] = (a < b) ? MIN(a,c) : MIN(b,c);
+-        }
+-    }
+-
+-    /* The result is stored in the very right down cell */
+-    return d[n-1][m-1];
+-}
+-
  /* ------------------------------------------------------------- */
  
  gsize levenshtein_strcasecmp(const gchar * string, const gchar * other)
