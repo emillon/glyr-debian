@@ -7,7 +7,7 @@ Subject: Link stringlib & core
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index dbd431a..38b46d1 100644
+index dbd431a..a28a02e 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
 @@ -1,4 +1,4 @@
