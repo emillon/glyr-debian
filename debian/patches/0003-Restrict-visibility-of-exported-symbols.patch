@@ -5,16 +5,18 @@ Subject: Restrict visibility of exported symbols
 By default, GCC makes every symbol in the .so visible. However, to avoid clashes
 and maintain a clear API it is better to export only a whitelist.
 
-This patch does two things :
+This patch does three things :
 
   - set the default visibility to "hidden".
   - annotate some exported functions to "default", ie. externally visible.
+  - copy get_next_word to glyrc as it was erroneously linked from libglyr.
 ---
- CMakeLists.txt |    2 +-
- lib/cache.c    |    9 +++++++++
- lib/glyr.c     |   56 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- lib/testing.c  |    2 ++
- 4 files changed, 68 insertions(+), 1 deletion(-)
+ CMakeLists.txt       |    2 +-
+ lib/cache.c          |    9 ++++++++
+ lib/glyr.c           |   56 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ lib/testing.c        |    2 ++
+ src/glyrc/autohelp.c |   28 +++++++++++++++++++++++++
+ 5 files changed, 96 insertions(+), 1 deletion(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index ea9d4cc..e034b04 100644
@@ -577,3 +579,42 @@ index ba43a0a..6039508 100644
  GlyrMemCache * glyr_testing_call_parser(const char * provider_name, GLYR_GET_TYPE type, GlyrQuery * query, GlyrMemCache * cache)
  {
      GlyrMemCache * result = NULL;
+diff --git a/src/glyrc/autohelp.c b/src/glyrc/autohelp.c
+index 002461f..4fa3838 100644
+--- a/src/glyrc/autohelp.c
++++ b/src/glyrc/autohelp.c
+@@ -67,6 +67,34 @@ gsize levenshtein_strcmp(const gchar * s, const gchar * t)
+     return d[n-1][m-1];
+ }
+ 
++/* Copied from lib/stringlib.c - more details there */
++static gchar * get_next_word(const gchar * string, const gchar * delim, gsize *offset, gsize len)
++{
++    gchar * word = NULL;
++    if(string && delim && *(offset) < len)
++    {
++        gchar * occurence = strstr(string+(*offset),delim);
++        if(occurence)
++        {
++            word=copy_value(string+(*offset),occurence);
++            *(offset) += (1 + occurence - (string + *(offset)));
++        }
++        else
++        {
++            word=copy_value(string+(*offset),string+len);
++            *(offset) = len;
++        }
++    }
++    if(word)
++    {
++        gchar * trim = g_malloc0(len + 1);
++        trim_copy(word,trim);
++        free(word);
++        word = trim;
++    }
++    return word;
++}
++
+ /* ------------------------------------------------------------- */
+ 
+ gsize levenshtein_strcasecmp(const gchar * string, const gchar * other)
