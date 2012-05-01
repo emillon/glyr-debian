@@ -1,5 +1,4 @@
 libglyr.so.1 libglyr1 #MINVER#
- (optional)get_next_word@Base 0.9.8
  glyr_cache_copy@Base 0.9.8
  glyr_cache_free@Base 0.9.8
  glyr_cache_new@Base 0.9.8
