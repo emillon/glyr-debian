@@ -7,13 +7,13 @@ Subject: Don't strip binaries
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index d78caec..ea9d4cc 100644
+index 1be2cfc..e034b04 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -57,7 +57,7 @@ ENDIF()
  MESSAGE("-- Building Target: ${CMAKE_BUILD_TYPE}")
  
- SET(COMMON_FLAGS "-Wall -Wextra -Wstrict-prototypes -std=c99 -W -Wno-unused-parameter -Wno-strict-prototypes")
+ SET(COMMON_FLAGS "-Wall -Wextra -Wstrict-prototypes -std=c99 -W -Wno-unused-parameter -Wno-strict-prototypes -fvisibility=hidden")
 -SET(CMAKE_C_FLAGS_RELEASE "${COMMON_FLAGS} ${CMAKE_C_FLAGS} -Os -s")
 +SET(CMAKE_C_FLAGS_RELEASE "${COMMON_FLAGS} ${CMAKE_C_FLAGS} -O2 -g")
  SET(CMAKE_C_FLAGS_DEBUG   "${COMMON_FLAGS} ${CMAKE_C_FLAGS} -ggdb3")
