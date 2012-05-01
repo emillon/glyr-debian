@@ -3,8 +3,9 @@ Date: Tue, 1 May 2012 20:35:52 +0200
 Subject: Link stringlib & core
 
 ---
- src/CMakeLists.txt |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ src/CMakeLists.txt   |    2 +-
+ src/glyrc/autohelp.c |   23 -----------------------
+ 2 files changed, 1 insertion(+), 24 deletions(-)
 
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
 index dbd431a..a28a02e 100644
@@ -16,3 +17,37 @@ index dbd431a..a28a02e 100644
  TARGET_LINK_LIBRARIES(glyrc glyr)
  
  ADD_EXECUTABLE(example examples/example.c)
+diff --git a/src/glyrc/autohelp.c b/src/glyrc/autohelp.c
+index b2e73c5..c47a349 100644
+--- a/src/glyrc/autohelp.c
++++ b/src/glyrc/autohelp.c
+@@ -25,29 +25,6 @@
+ 
+ /* ------------------------------------------------------------- */
+ 
+-gsize levenshtein_strcasecmp(const gchar * string, const gchar * other)
+-{
+-	gsize diff = 100;
+-	if(string != NULL && other != NULL)
+-	{
+-		/* Lowercase UTF8 string might have more or less bytes! */
+-		gchar * lower_string = g_ascii_strdown(string,-1);
+-		gchar * lower_other  = g_ascii_strdown(other, -1);
+-
+-		if(lower_string && lower_other)
+-		{
+-			diff = levenshtein_strcmp(lower_string, lower_other);
+-		}
+-
+-		/* Free 'em */
+-		g_free(lower_string);
+-		g_free(lower_other);
+-	}
+-	return diff;
+-}
+-
+-/* ------------------------------------------------------------- */
+-
+ void suggest_other_getter(GlyrQuery * query, const char * wrong_input)
+ {
+ 	if(query->verbosity <= 0)
