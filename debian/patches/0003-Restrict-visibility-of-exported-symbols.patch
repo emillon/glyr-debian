@@ -5,18 +5,26 @@ Subject: Restrict visibility of exported symbols
 By default, GCC makes every symbol in the .so visible. However, to avoid clashes
 and maintain a clear API it is better to export only a whitelist.
 
-This patch does three things :
+This patch does two things and a hack :
 
   - set the default visibility to "hidden".
   - annotate some exported functions to "default", ie. externally visible.
-  - copy get_next_word to glyrc as it was erroneously linked from libglyr.
+
+  - (the hack) adjust src/glyrc/autohelp.c so that it links directly against
+    stringlib objects (instead of linking through libglyr)
+
+The last point is certainly questionable. The problem is that a few functions
+from stringlib are referenced in autohelp.c. An alternative solution could be to
+rename get_next_word into glyr_get_next_word and make it part of the public API,
+but that's not ideal either.
 ---
  CMakeLists.txt       |    2 +-
- lib/cache.c          |    9 ++++++++
- lib/glyr.c           |   56 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ lib/cache.c          |    9 +++++++
+ lib/glyr.c           |   56 +++++++++++++++++++++++++++++++++++++++++
  lib/testing.c        |    2 ++
- src/glyrc/autohelp.c |   44 ---------------------------------------
- 5 files changed, 68 insertions(+), 45 deletions(-)
+ src/CMakeLists.txt   |    2 +-
+ src/glyrc/autohelp.c |   67 --------------------------------------------------
+ 6 files changed, 69 insertions(+), 69 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index ea9d4cc..e034b04 100644
@@ -579,11 +587,21 @@ index ba43a0a..6039508 100644
  GlyrMemCache * glyr_testing_call_parser(const char * provider_name, GLYR_GET_TYPE type, GlyrQuery * query, GlyrMemCache * cache)
  {
      GlyrMemCache * result = NULL;
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index dbd431a..a28a02e 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-ADD_EXECUTABLE(glyrc glyrc/glyrc.c glyrc/autohelp.c glyrc/update.c)
++ADD_EXECUTABLE(glyrc glyrc/glyrc.c glyrc/autohelp.c glyrc/update.c ../lib/stringlib.c ../lib/core.c ../lib/blacklist.c ../lib/cache_intern.c)
+ TARGET_LINK_LIBRARIES(glyrc glyr)
+ 
+ ADD_EXECUTABLE(example examples/example.c)
 diff --git a/src/glyrc/autohelp.c b/src/glyrc/autohelp.c
-index 002461f..b2e73c5 100644
+index 002461f..c47a349 100644
 --- a/src/glyrc/autohelp.c
 +++ b/src/glyrc/autohelp.c
-@@ -23,50 +23,6 @@
+@@ -23,73 +23,6 @@
  
  #include "../../lib/stringlib.h"
  
@@ -631,6 +649,29 @@ index 002461f..b2e73c5 100644
 -    return d[n-1][m-1];
 -}
 -
+-/* ------------------------------------------------------------- */
+-
+-gsize levenshtein_strcasecmp(const gchar * string, const gchar * other)
+-{
+-	gsize diff = 100;
+-	if(string != NULL && other != NULL)
+-	{
+-		/* Lowercase UTF8 string might have more or less bytes! */
+-		gchar * lower_string = g_ascii_strdown(string,-1);
+-		gchar * lower_other  = g_ascii_strdown(other, -1);
+-
+-		if(lower_string && lower_other)
+-		{
+-			diff = levenshtein_strcmp(lower_string, lower_other);
+-		}
+-
+-		/* Free 'em */
+-		g_free(lower_string);
+-		g_free(lower_other);
+-	}
+-	return diff;
+-}
+-
  /* ------------------------------------------------------------- */
  
- gsize levenshtein_strcasecmp(const gchar * string, const gchar * other)
+ void suggest_other_getter(GlyrQuery * query, const char * wrong_input)

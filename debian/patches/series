@@ -1,4 +1,3 @@
 0001-Don-t-strip-binaries.patch
 0002-Allocate-strings-in-the-correct-heap.patch
 0003-Restrict-visibility-of-exported-symbols.patch
-0004-Link-stringlib-core.patch
