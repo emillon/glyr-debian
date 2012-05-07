@@ -30,6 +30,8 @@ libglyr.so.1 libglyr1 #MINVER#
  glyr_info_free@Base 0.9.9
  glyr_info_get@Base 0.9.9
  glyr_init@Base 0.9.9
+ glyr_levenshtein_strcmp@Base 0.9.9
+ glyr_levenshtein_strnormcmp@Base 0.9.9
  glyr_md5sum_to_string@Base 0.9.9
  glyr_opt_album@Base 0.9.9
  glyr_opt_allowed_formats@Base 0.9.9
@@ -65,4 +67,5 @@ libglyr.so.1 libglyr1 #MINVER#
  glyr_string_to_md5sum@Base 0.9.9
  glyr_testing_call_parser@Base 0.9.9
  glyr_testing_call_url@Base 0.9.9
+ glyr_type_is_image@Base 0.9.9
  glyr_version@Base 0.9.9
