@@ -1,4 +1,4 @@
-glyr (0.9.8-1) unstable; urgency=low
+glyr (0.9.9-1) unstable; urgency=low
 
   * Initial release (Closes: #651416).
   * Patches:
@@ -6,4 +6,4 @@ glyr (0.9.8-1) unstable; urgency=low
     - Fix a memory allocation bug
     - Restrict symbols visibility
 
- -- Etienne Millon <etienne.millon@gmail.com>  Mon, 23 Apr 2012 22:23:26 +0200
+ -- Etienne Millon <etienne.millon@gmail.com>  Mon, 07 May 2012 17:09:00 +0200
