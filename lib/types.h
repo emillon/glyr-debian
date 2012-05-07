@@ -262,7 +262,7 @@ typedef enum
  * GlyrMemCache represents a single item received by libglyr. 
  * You should <emphasis>NOT</emphasis> modify any of the fields directly, they are meant to be read-only.
  * If you need to set any field (usually only necessary in conjunction with glyr/cache.h) you may 
- * want to use the glyr_cache_set_<public field> routines to safely modify the data.
+ * want to use the glyr_cache_set_[public field] routines to safely modify the data.
  */
 typedef struct _GlyrMemCache {
 
@@ -464,75 +464,6 @@ typedef struct _GlyrFetcherInfo {
  * Returns: a #GLYR_ERROR
 */
 typedef GLYR_ERROR (*DL_callback)(GlyrMemCache * dl, struct _GlyrQuery * s);
-
-
-/* This is confusing gtk-doc */
-#ifndef __GTK_DOC_IGNORE__
-
-/*
- * SWIG STUFF
- * Usually not worth viewing.
- */
-
-	#ifdef COMING_FROM_SWIG
-	%extend GlyrQuery
-	{
-	    GlyrQuery()
-	    {
-            GlyrQuery my_query;
-            glyr_query_init(&my_query);
-            GlyrQuery * copy = malloc(sizeof(GlyrQuery));
-            memcpy(copy,&my_query,sizeof(GlyrQuery));
-            return copy;
-	    }
-
-	    ~GlyrQuery()
-	    {
-            glyr_query_destroy($self);
-            if($self != NULL)
-                free($self);
-        }
-	}
-
-	%extend GlyrMemCache
-	{
-	    GlyrMemCache()
-	    {
-		    return glyr_cache_new();
-	    }
-	    ~GlyrMemCache()
-	    {
-		    glyr_cache_free($self);
-	    }
-	}
-
-	%extend GlyrFetcherInfo
-	{
-	    GlyrFetcherInfo()
-	    {
-	    	return glyr_info_get();
-	    }
-
-	    ~GlyrFetcherInfo()
-	    {
-    		glyr_info_free($self);
-	    }
-	}
-
-    %extend GlyrDatabase
-    {
-        GlyrDatabase()
-        {
-            return glyr_db_new();
-        }
-
-        ~GlyrDatabase()
-        {
-           glyr_db_destroy($self);
-        }
-    }
-	#endif
-#endif
 
 #ifdef __cplusplus
 }

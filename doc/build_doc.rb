@@ -31,6 +31,7 @@ BUILD_HEADERS =
   "#{DIR}/glyr.h",
   "#{DIR}/types.h",
   "#{DIR}/cache.h",
+  "#{DIR}/misc.h",
   "#{DIR}/config.h",
   "#{DIR}/testing.h",
 ]
@@ -80,6 +81,7 @@ def create_dir_and_cd dirname
 end
 
 def do_or_die is_cool
+    puts is_cool
 	exit unless system is_cool	
 end
 

@@ -38,7 +38,7 @@ ENDIF()
 # ------------------------------------------------
 SET(GLYR_VERSION_MAJOR "0")
 SET(GLYR_VERSION_MINOR "9")
-SET(GLYR_VERSION_MICRO "8")
+SET(GLYR_VERSION_MICRO "9")
 SET(GLYR_VERSION_NAME  "Catholic Cat")
 # ------------------------------------------------
 
@@ -56,8 +56,13 @@ ELSE()
 ENDIF()
 MESSAGE("-- Building Target: ${CMAKE_BUILD_TYPE}")
 
-SET(COMMON_FLAGS "-Wall -Wextra -Wstrict-prototypes -std=c99 -W -Wno-unused-parameter -Wno-strict-prototypes")
-SET(CMAKE_C_FLAGS_RELEASE "${COMMON_FLAGS} ${CMAKE_C_FLAGS} -Os -s")
+IF(CMAKE_COMPILER_IS_GNUCC)
+    SET(GCC_ONLY_FLAGS "-std=c99")
+    SET(GCC_ONLY_OPT   "-s")
+ENDIF()
+
+SET(COMMON_FLAGS "${GCC_ONLY_FLAGS} -Wall -Wextra -Wstrict-prototypes -W -Wno-unused-parameter -Wno-strict-prototypes -fvisibility=hidden")
+SET(CMAKE_C_FLAGS_RELEASE "${COMMON_FLAGS} ${CMAKE_C_FLAGS} -Os ${GCC_ONLY_OPT}")
 SET(CMAKE_C_FLAGS_DEBUG   "${COMMON_FLAGS} ${CMAKE_C_FLAGS} -ggdb3")
 SET(CMAKE_C_FLAGS "${COMMON_FLAGS} ${CMAKE_C_FLAGS}")
 # ------------------------------------------------
@@ -112,6 +117,7 @@ SET(LIB_SOURCE_LOCATIONS
 	# core
 	"${DIR_ROOT}/glyr.c"
 	"${DIR_ROOT}/core.c"
+	"${DIR_ROOT}/misc.c"
 	"${DIR_ROOT}/cache_intern.c"
 	"${DIR_ROOT}/cache.c"
 	"${DIR_ROOT}/register_plugins.c"
@@ -166,6 +172,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_COVER}/rhapsody.c"
 	"${DIR_COVER}/picsearch.c"
 	"${DIR_COVER}/musicbrainz.c"
+	"${DIR_COVER}/slothradio.c"
 	"${DIR_LYRICS}/lyrdb.c"
 	"${DIR_LYRICS}/metallum.c"
 	"${DIR_LYRICS}/magistrix.c"

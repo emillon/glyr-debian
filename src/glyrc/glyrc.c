@@ -46,25 +46,32 @@
 /* Update mechanism */
 #include "update.h"
 
-//* ------------------------------------------------------- */
-//* ------------------------------------------------------- */
-//* ------------------------------------------------------- */
-//* ------------------------------------------------------- */
+/* --callback and --write escape strings */
+#include "escape.h"
+
+/* cprint() */
+#include "colorprint.h"
+
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
 
 #define SET_IF_NULL(VAR, SET_TO) (VAR) = ((VAR) ? (VAR) : (SET_TO))
-#define LOG_DOMAIN "Glyr"
+#define LOG_DOMAIN "Glyrc"
 
-//* ------------------------------------------------------- */
-//* ------------------------------------------------------- */
-//* ------------------------------------------------------- */
-//* ------------------------------------------------------- */
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
 
 /* Shared data of main/callback */
 typedef struct 
 {
     char * output_path;
     char * exec_on_call;
-    int item_counter;
+    bool as_one;
+    bool append_format;
 
 } callback_data_t;
 
@@ -74,37 +81,25 @@ typedef struct
 {                          \
     .output_path  = NULL,  \
     .exec_on_call = NULL,  \
-    .item_counter = 0      \
+    .as_one       = false, \
+    .append_format= false  \
 }                          \
 
 //////////////////////////
 
 static GlyrQuery * glob_lastQuery = NULL;
 
-//* ------------------------------------------------------- */
-//* ------------------------------------------------------- */
-//* ------------------------------------------------------- */
-//* ------------------------------------------------------- */
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
 
 void log_func(const gchar *log_domain,GLogLevelFlags log_level,const gchar *message, gpointer user_data)
 {
     fputs(message,GLYR_OUTPUT);
 }
 
-//* ------------------------------------------------------- */
-
-static void message(gint verbosity, GlyrQuery * s, const char * fmt, ...)
-{
-    if((s && verbosity <= s->verbosity) || verbosity == -1)
-    {
-        va_list param;
-        va_start(param,fmt);
-        g_logv(LOG_DOMAIN,G_LOG_LEVEL_INFO,fmt,param);
-        va_end(param);
-    }
-}
-
-//* ------------------------------------------------------- */
+////////////////////////////////////////////////////////////////
 
 #ifndef G_OS_WIN32
 #define STACK_FRAME_SIZE 20
@@ -121,17 +116,17 @@ static void print_trace(void)
 
     for (it = 0; it < size; it++)
     {
-        message(-1,NULL,"    [#%02u] %s\n",(gint)it+1, bt_info_list[it]);
+        cvprint(DEFAULT,"    [#%02u] %s\n",(gint)it+1, bt_info_list[it]);
     }
 
-    message(-1,NULL,"\n%zd calls in total are shown.\n", size);
+    cvprint(DEFAULT,"\n%zd calls in total are shown.\n", size);
     g_free(bt_info_list);
 }
 #endif
 
-//* --------------------------------------------------------- */
-//* --------------------------------------------------------- */
-//* --------------------------------------------------------- */
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
 
 static void sig_handler(int signal)
 {
@@ -140,22 +135,22 @@ static void sig_handler(int signal)
         case SIGABRT :
         case SIGFPE  :
         case SIGSEGV : /* sigh */
-            message(-1,NULL,"\nFATAL: libglyr stopped/crashed due to a %s of death.\n",g_strsignal(signal));
-            message(-1,NULL,"       This is entirely the fault of the libglyr developers. Yes, we failed. Sorry. Now what to do:\n");
-            message(-1,NULL,"       It would be just natural to blame us now, so just visit <https://github.com/sahib/glyr/issues>\n");
-            message(-1,NULL,"       and throw hard words like 'backtrace', 'bug report' or even the '$(command I issued' at them).\n");
-            message(-1,NULL,"       The libglyr developers will try to fix it as soon as possible so please stop pulling their hair.\n");
+            cvprint(RED,"\nFATAL: libglyr stopped/crashed due to a %s of death.\n",g_strsignal(signal));
+            cvprint(DEFAULT,"       This is entirely the fault of the libglyr developers. Yes, we failed. Sorry. Now what to do:\n");
+            cvprint(DEFAULT,"       It would be just natural to blame us now, so just visit <https://github.com/sahib/glyr/issues>\n");
+            cvprint(DEFAULT,"       and throw hard words like 'backtrace', 'bug report' or even the '$(command I issued' at them).\n");
+            cvprint(DEFAULT,"       The libglyr developers will try to fix it as soon as possible so please stop pulling their hair.\n");
 #ifndef G_OS_WIN32
-            message(-1,NULL,"\nA list of the last called functions follows, please add this to your report:\n");
+            cvprint(DEFAULT,"\nA list of the last called functions follows, please add this to your report:\n");
             print_trace();
 #endif
-            message(-1,NULL,"\n(Thanks, and Sorry for any bad feelings.)\n\n");
+            cvprint(DEFAULT,"\n(Thanks, and Sorry for any bad feelings.)\n\n");
             break;
     }
     exit(EXIT_FAILURE);
 }
 
-/* --------------------------------------------------------- */
+////////////////////////////////////////////////////////////////
 
 static void init_signals(void)
 {
@@ -165,18 +160,18 @@ static void init_signals(void)
     signal(SIGFPE,  sig_handler);
 }
 
-//* --------------------------------------------------------- */
+////////////////////////////////////////////////////////////////
 
 static void handle_cancel(int signo)
 {
-    message(-1,NULL,"Canceling..\n");
+    cvprint(YELLOW,"Canceling..\n");
     if(glob_lastQuery != NULL)
     {
         glyr_signal_exit(glob_lastQuery);
     }
 }
 
-//* --------------------------------------------------------- */
+////////////////////////////////////////////////////////////////
 
 static void init_cancel_handler(GlyrQuery * p_lastQuery)
 {
@@ -184,41 +179,40 @@ static void init_cancel_handler(GlyrQuery * p_lastQuery)
     signal(SIGINT, handle_cancel);
 }
 
-//* --------------------------------------------------------- */
+////////////////////////////////////////////////////////////////
 // --------------------------------------------------------- //
 // --------------------------------------------------------- //
 
 static void print_version(GlyrQuery * s)
 {
-    message(-1,s, "%s\n\n",glyr_version());
-    message(-1,s, "This is still beta software, expect quite a lot bugs.\n");
-    message(-1,s, "Email bugs to <sahib@online.de> or use the bugtracker\n"
+    cprint(DEFAULT,-1,s, "%s\n\n",glyr_version());
+    cprint(DEFAULT,-1,s, "This is still beta software, expect quite a lot bugs.\n");
+    cprint(DEFAULT,-1,s, "Email bugs to <sahib@online.de> or use the bugtracker\n"
             "at https://github.com/sahib/glyr/issues - Thank you! \n");
 
     exit(0);
 }
 
 
-//* --------------------------------------------------------- */
+////////////////////////////////////////////////////////////////
 // --------------------------------------------------------- //
-/* --------------------------------------------------------- */
+////////////////////////////////////////////////////////////////
 
 void help_short(GlyrQuery * s)
 {
-    message(-1,s,"Usage: glyrc [GETTER] (options)\n\nwhere [GETTER] must be one of:\n");
+    cprint(DEFAULT,-1,s,"Usage: glyrc [GETTER] (options)\n\nwhere [GETTER] must be one of:\n");
     GlyrFetcherInfo * info  = glyr_info_get();
     GlyrFetcherInfo * track = info;
     while(info != NULL)
     {
-        message(-1,NULL," - %s\n", info->name);
+        cprint(DEFAULT,-1,NULL," - %s\n", info->name);
         info = info->next;
     }
     glyr_info_free(track);
 
 #define IN "    "
-    message(-1,s,"\nGENERAL OPTIONS:\n"
+    cprint(DEFAULT,-1,s,"\nGENERAL OPTIONS:\n"
             IN"-f --from                String: Providers from where to get metadata. Refer to glyrc --list for a full list\n"
-            IN"-w --write               Path: Write metadata to the dir <d>, or filename <d>, special values stdout, stderr and null are supported\n"
             IN"-n --number              Integer: Download max. <n> items. Amount of actual downloaded items may be less.\n"
             IN"-l --lang                String: Language settings. Used by a few getters to deliever localized data. Given in ISO 639-1 codes like 'de'\n"
             IN"-o --only-lang           Only use providers that offer language specific data, this only applies for text items.\n"
@@ -226,6 +220,25 @@ void help_short(GlyrQuery * s)
             IN"-q --qsratio             Float: How to weight quality/speed; 1.0 = full quality, 0.0 = full speed.\n"
             IN"-x --plugmax             Integer. Maximum number od download a plugin may deliever. Use to make results more vary.\n"
             IN"-v --verbosity           Integer. Set verbosity from 0 to 4. See online-README for details.\n"
+            IN"-w --write               Path: Write metadata to the dir <d>, or filename <d>, special values stdout, stderr and null are supported\n"
+            IN"                               Certain escapes are escaped inside the filename in the form :X:, where X may be one of:\n" 
+            IN"                                  * type     : The getter used in this query (e.g. cover)\n"
+            IN"                                  * artist   : Artist - as passed by -a\n"
+            IN"                                  * album    : Album  - as passed by -b\n"
+            IN"                                  * title    : Title  - as passed by -t\n"
+            IN"                                  * size     : Size in bytes\n"
+            IN"                                  * format   : The image format or 'txt' for textitems\n"
+            IN"                                  * source   : The source URL of this item\n"
+            IN"                                  * prov     : The Provider of this item\n"
+            IN"                                  * cksum    : a md5sum of the data\n"
+            IN"                                  * rating   : (Usually 0)\n"
+            IN"                                  * duration : (Only for tracks) Duration in seconds\n"
+            IN"                                  * number   : An index incremented with each item (starting with 1)\n"
+            IN"\n"
+            IN"                               The default format is ':artist:_:album:_:title:_:type:_:number:.:format:'\n"
+            IN"                               Strings containing '/' are replaced with '|' automatically,\n"
+            IN"                               so --write ':artist:' for AC/DC will result in AC|DC\n"
+            IN"\n"
             "\nNETWORK OPTIONS\n"
             IN"-p --parallel            Integer: Define the number of downloads that may be performed in parallel.\n"
             IN"-u --useragent           String: The useragent to use during HTTP requests\n"
@@ -247,9 +260,14 @@ void help_short(GlyrQuery * s)
             IN"-h --help                This text you unlucky wanderer are viewing.\n"
             IN"-V --version             Print the version string.\n"
             IN"-U --update              Updates libglyr if new version is available.\n"
+            IN"-g --as-one              (Textitems only) Output all results as one (useful for tracklist and albumlist).\n"
+            IN"-G --no-as-one           Disables --as-one (Default)\n"
+            IN"-y --color               Enables colored output for glyrc (Default)\n"
+            IN"-Y --no-color            Prints no colored output\n"
             IN"-s --musictree-path <p>  <p> is a path to your music directory. Glyr might fetch things like folger.jpg from there;\n"
             IN"-j --callback            Command: Set a bash command to be executed when a item is finished downloading;\n"
-            IN"                         The special string <path> is expanded with the actual path to the data.\n"
+            IN"                                  All escapes mentioned in --write are supported too, and additonally:\n"
+            IN"                                    * path : The path were the item was written to.\n"
             "\nDATABASE OPTIONS\n"
             IN"-c --cache <folder>      Creates or opens an existing cache at <folder>/metadata.db and lookups data from there.\n"
             IN"cache select [Query]     Selects data from the cache; you can use any other option behind this.\n"
@@ -269,16 +287,16 @@ void help_short(GlyrQuery * s)
             "A more detailed version of this help can be found online: https://github.com/sahib/glyr/wiki/Commandline-arguments\n"
             );
 
-    message(-1,s,"\nAUTHOR: (C) Christopher Pahl - 2011, <sahib@online.de>\n%s\n\n",glyr_version());
+    cprint(DEFAULT,-1,s,"\nAUTHOR: (C) Christopher Pahl - 2011, <sahib@online.de>\n%s\n\n",glyr_version());
     exit(EXIT_FAILURE);
 #undef IN
 }
 
-/* --------------------------------------------------------- */
+////////////////////////////////////////////////////////////////
 
 static void visualize_from_options(void)
 {
-    message(-1,NULL,"# First line is the name of the fetcher you can use,\n"
+    cprint(WHITE,-1,NULL,"# First line is the name of the fetcher you can use,\n"
             "# Second is the providername with the shortkey in []\n"
             "# Some unimportant information follows intented by '-'\n\n");
 
@@ -287,41 +305,41 @@ static void visualize_from_options(void)
     {
         for(GlyrFetcherInfo * elem0 = info; elem0; elem0 = elem0->next)
         {
-            message(-1,NULL," %s => %d\n",elem0->name,elem0->type);
+            cvprint(BLUE," %s => %d\n",elem0->name,elem0->type);
             for(GlyrSourceInfo * elem1 = elem0->head; elem1; elem1 = elem1->next)
             {
-                message(-1,NULL,"   # %s [%c]\n",elem1->name,elem1->key);
-                message(-1,NULL,"     - Quality: %d\n",elem1->quality);
-                message(-1,NULL,"     - Speed:   %d\n",elem1->speed);
-                message(-1,NULL,"     - Type:    %d\n",elem1->type);
+                cvprint(CYAN,"   # %s [%c]\n",elem1->name,elem1->key);
+                cvprint(YELLOW,"     - Quality: %d\n",elem1->quality);
+                cvprint(YELLOW,"     - Speed:   %d\n",elem1->speed);
+                cvprint(YELLOW,"     - Type:    %s\n",glyr_get_type_to_string(elem1->type));
             }
 
-            message(-1,NULL," + Requires: (%s%s%s)\n",
+            cvprint(GREEN," + Requires: (%s%s%s)\n",
                     elem0->reqs & GLYR_REQUIRES_ARTIST ? "Artist " : "",
                     elem0->reqs & GLYR_REQUIRES_ALBUM  ? "Album "  : "",
                     elem0->reqs & GLYR_REQUIRES_TITLE  ? "Title"   : ""
                    );
-            message(-1,NULL," + Optional: (%s%s%s)\n",
+            cvprint(MAGENTA," + Optional: (%s%s%s)\n",
                     elem0->reqs & GLYR_OPTIONAL_ARTIST ? "Artist " : "",
                     elem0->reqs & GLYR_OPTIONAL_ALBUM  ? "Album "  : "",
                     elem0->reqs & GLYR_OPTIONAL_TITLE  ? "Title"   : ""
                    );
 
-            message(-1,NULL,"\n///////////////////////////////\n");
+            cvprint(BLUE,"\n///////////////////////////////\n\n");
         }
 
-        message(-1,NULL,"\nFollowing providers work with all types:\n");
-        message(-1,NULL,"  # local     [l] (A local SQLite DB cache; see --cache)\n");
-        message(-1,NULL,"  # musictree [t] (Gets items from your music directory (folder.jpg etc) --musictree-path)\n");
-        message(-1,NULL,"\nThe string 'all' in --from enables all providers.\n");
-        message(-1,NULL,"You can disable certain providers from this by prepending a '-':\n");
-        message(-1,NULL,"  \"all;-lastfm\"\n");
-        message(-1,NULL,"\n///////////////////////////////\n");
+        cvprint(WHITE,"\nFollowing providers work with all types:\n");
+        cvprint(WHITE,"  # local     [l] (A local SQLite DB cache; see --cache)\n");
+        cvprint(WHITE,"  # musictree [t] (Gets items from your music directory (folder.jpg etc) --musictree-path)\n");
+        cvprint(WHITE,"\nThe string 'all' in --from enables all providers.\n");
+        cvprint(WHITE,"You can disable certain providers from this by prepending a '-':\n");
+        cvprint(WHITE,"  \"all;-lastfm\"\n");
+        cvprint(DEFAULT,"\n///////////////////////////////\n");
     }
     glyr_info_free(info);
 }
 
-/* --------------------------------------------------------- */
+////////////////////////////////////////////////////////////////
 
 static void parse_commandline_general(int argc, char * const * argv, GlyrQuery * glyrs, callback_data_t * CBData, GlyrDatabase ** db)
 {
@@ -345,8 +363,11 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
         {"no-download",   no_argument,       0, 'D'},
         {"list",          no_argument,       0, 'L'},
         {"force-utf8",    no_argument,       0, '8'},
-        // ---------- plugin specific ------------ //
+        {"as-one",        no_argument,       0, 'g'},
+        {"no-as-one",     no_argument,       0, 'G'},
         {"only-lang",     no_argument,       0, 'o'},
+        {"color",         no_argument,       0, 'y'},
+        {"no-color",      no_argument,       0, 'Y'},
         {"artist",        required_argument, 0, 'a'},
         {"album",         required_argument, 0, 'b'},
         {"title",         required_argument, 0, 't'},
@@ -360,11 +381,12 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
         {0,               0,                 0, '0'}
     };
 
+    opterr = 0;
     while(TRUE)
     {
         gint c;
         gint option_index = 0;
-        if((c = getopt_long_only(argc, argv, "f:w:p:r:m:x:u:v:q:c:F:hVodDLa:b:t:i:e:s:n:l:z:j:k:8",long_options, &option_index)) == -1)
+        if((c = getopt_long_only(argc, argv, "f:W:w:p:r:m:x:u:v:q:c:F:hVodDLa:b:t:i:e:s:n:l:z:j:k:8gGyY",long_options, &option_index)) == -1)
         {
             break;
         }
@@ -386,7 +408,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
                     else
                     {
                         g_free(dirname);
-                        message(-1,NULL,"'%s' does not seem to be an valid directory!\n",optarg);
+                        cprint(DEFAULT,-1,NULL,"'%s' does not seem to be an valid directory!\n",optarg);
                         exit(-1);
                     }
                     break;
@@ -450,7 +472,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
                     GlyrDatabase * new_db = glyr_db_init(optarg);
                     if(db == NULL)
                     {  
-                        message(-1,NULL,"Unable to open or create a database at specified path.\n");
+                        cprint(DEFAULT,-1,NULL,"Unable to open or create a database at specified path.\n");
                         exit(EXIT_FAILURE);
                     }
                     *db = new_db;
@@ -486,86 +508,42 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
             case 's':
                 glyr_opt_musictree_path(glyrs,optarg);
                 break;
+            case 'g':
+                CBData->as_one = true;
+                break;
+            case 'G':
+                CBData->as_one = false;
+                break;
+            case 'y':
+                enable_color(true);
+                break;
+            case 'Y':
+                enable_color(false);
+                break;
             case '?':
+                cprint(RED,-1,NULL,"Option \"%s\" is not known\n",argv[optind-1]);
+                exit(-1);
                 break;
             default:
-                exit(0);
-        }
-    }
-}
+                cprint(RED,-1,NULL,"Unknown Error while parsing commandline arguments.\n");
+                exit(-1);
+        } // end switch()
+    } // end while()
 
-//* --------------------------------------------------------- */
-// --------------------------------------------------------- //
-/* --------------------------------------------------------- */
-
-static void replace_char(char * string, gchar a, gchar b)
-{
-    if(string != NULL)
+    if(optind < argc && glyrs->verbosity >= 2)
     {
-        gsize str_len = strlen(string);
-        for(gsize i = 0; i < str_len; i++)
+        cprint(DEFAULT,2,glyrs,"Note: You have unused arguments:\n");
+        for(int i = optind; i < argc; ++i)
         {
-            if(string[i] == a)
-            {
-                string[i] = b;
-            }
+            cprint(DEFAULT,2,glyrs,"      * %s\n",argv[optind]);
         }
+        cprint(DEFAULT,2,glyrs,"\n\n");
     }
 }
 
-//* --------------------------------------------------------- */
+////////////////////////////////////////////////////////////////
 // --------------------------------------------------------- //
-/* --------------------------------------------------------- */
-
-char * correct_path(const char * path)
-{
-    char * result = NULL;
-    if(path != NULL)
-    {
-        result = g_strdup(path);
-        replace_char(result,'/','+');
-        replace_char(result,' ','+');
-    }
-    return result;
-}
-
-/* --------------------------------------------------------- */
-// --------------------------------------------------------- //
-/* --------------------------------------------------------- */
-
-char * get_path_by_type(GlyrQuery * s, GlyrMemCache * c, const gchar * save_dir, gint num)
-{
-    char * artist = correct_path(s->artist);
-    char * album  = correct_path(s->album);
-    char * title  = correct_path(s->title);
-
-    artist = (artist == NULL) ? "" : artist;
-    album  = (album  == NULL) ? "" : album;
-    title  = (title  == NULL) ? "" : title;
-
-    char * type_string = (gchar*)glyr_get_type_to_string(s->type);
-    char * specifier = g_strdup_printf("%s%s%s%s%s%s",
-            artist,(*artist) ? "_" : "", 
-            album ,(*album ) ? "_" : "", 
-            title ,(*title ) ? "_" : "");
-
-    char * result = g_strdup_printf("%s/%s%s_%d.%s",
-            save_dir,
-            specifier,
-            type_string,
-            num,
-            (c->is_image) ? c->img_format : "txt");
-
-    if(*artist) g_free(artist); 
-    if(*album)  g_free(album);
-    if(*title)  g_free(title);
-    g_free(specifier);
-    return result;
-}
-
-/* --------------------------------------------------------- */
-// --------------------------------------------------------- //
-/* -------------------------------------------------------- */
+////////////////////////////////////////////////////////////////
 
 static GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
 {
@@ -573,6 +551,8 @@ static GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
     g_assert(CBQueryData);
 
     char * write_to_path = NULL;
+
+    increment_item_counter();
 
     /* write out 'live' */
     if(CBQueryData->output_path != NULL)
@@ -588,57 +568,63 @@ static GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
         {
             if(g_file_test(CBQueryData->output_path,G_FILE_TEST_IS_DIR) == TRUE)
             {
-                write_to_path = get_path_by_type(s,c,CBQueryData->output_path,CBQueryData->item_counter);
+                char * filename  = escape_colon_expr(":artist:_:album:_:title:_:type:_:number:.:format:",s,c);
+                char * directory = escape_colon_expr(CBQueryData->output_path,s,c);
+                write_to_path = g_strdup_printf("%s%s%s",directory,
+                        g_str_has_suffix(directory,G_DIR_SEPARATOR_S) ? "" : G_DIR_SEPARATOR_S,
+                        filename);
+
+                g_free(filename);
+                g_free(directory);
             }
             else
             {
-                write_to_path = g_strdup(CBQueryData->output_path);
+                write_to_path = escape_colon_expr(CBQueryData->output_path,s,c);
             }
 
             if(glyr_cache_write(c,write_to_path) == -1)
             {
-                message(1,s,"(!!) glyrc: writing data to <%s> failed.\n",write_to_path);
+                cprint(RED,1,s,"Error: Writing data to <%s> failed.\n",write_to_path);
             }
+
+            set_write_path(write_to_path);
 
             /* call a program if any specified */
             if(CBQueryData->exec_on_call != NULL)
             {
-                char ** path_splitv = g_strsplit(CBQueryData->exec_on_call,"<path>",0);
-                char * replace_path = g_strjoinv(write_to_path,path_splitv);
-                g_strfreev(path_splitv);
+                char * command = escape_colon_expr(CBQueryData->exec_on_call,s,c);
 
                 /* Call that command */
-                int exitVal = system(replace_path);
+                int exitVal = system(command);
                 if(exitVal != EXIT_SUCCESS)
                 {
-                    message(3,s,"glyrc: cmd returned a value != EXIT_SUCCESS\n");
+                    cprint(YELLOW,3,s,"Warning: cmd returned a value != EXIT_SUCCESS\n");
                 }
-                g_free(replace_path);
+                g_free(command);
             }
         }
     }
 
     /* Text Represantation of this item */
-    message(1,s,"\n///// ITEM #%d /////\n",CBQueryData->item_counter);
+    cprint(BLUE,1,s,"\n///// ITEM #%d /////\n",get_item_counter());
     if(write_to_path != NULL)
     {
-        message(1,s,"WRITE to '%s'\n",write_to_path);
-        g_free(write_to_path);
+        cprint(DEFAULT,1,s,"WRITE to '%s'\n",write_to_path);
+        //g_free(write_to_path);
     }
 
     if(s->verbosity > 0) 
     {
         glyr_cache_print(c);
     }
-    message(1,s,"\n////////////////////\n");
+    cprint(BLUE,1,s,"\n////////////////////\n");
 
-    CBQueryData->item_counter += 1;
     return GLYRE_OK;
 }
 
-/* --------------------------------------------------------- */
+////////////////////////////////////////////////////////////////
 // --------------------------------------------------------- //
-/* -------------------------------------------------------- */
+////////////////////////////////////////////////////////////////
 
 GLYR_GET_TYPE get_type_from_string(const char * string)
 {
@@ -660,20 +646,20 @@ GLYR_GET_TYPE get_type_from_string(const char * string)
     }
     else
     {
-        message(-1,NULL,"Warning: Can't get type information. Probably a bug.\n");
+        cprint(DEFAULT,-1,NULL,"Warning: Can't get type information. Probably a bug.\n");
     }
     glyr_info_free(info);
     return result;
 }
 
-/* --------------------------------------------------------- */
+////////////////////////////////////////////////////////////////
 // --------------------------------------------------------- //
-/* -------------------------------------------------------- */
+////////////////////////////////////////////////////////////////
 
 static gint db_foreach_callback(GlyrQuery * q, GlyrMemCache * c, void * p)
 {
     puts("\n////////////////////////////////////\n");
-    message(-1,NULL,"%s :: %s :: %s :: %s\n",q->artist,q->album,q->title,glyr_get_type_to_string(q->type));
+    cprint(DEFAULT,-1,NULL,"%s :: %s :: %s :: %s\n",q->artist,q->album,q->title,glyr_get_type_to_string(q->type));
     glyr_cache_print(c);
 
     int * i = p;
@@ -681,19 +667,19 @@ static gint db_foreach_callback(GlyrQuery * q, GlyrMemCache * c, void * p)
     return 0;
 }
 
-/*----------------------*/
+//////////////////////////////////////
 
 static void do_iterate_over_db(GlyrDatabase * db)
 {
     gint db_item_counter = 0;
     glyr_db_foreach(db,db_foreach_callback,&db_item_counter);
-    message(-1,NULL,"\n-----------------------------------\n");
-    message(-1,NULL,"=> In total %d items in database.",db_item_counter);    
-    message(-1,NULL,"\n-----------------------------------\n");
-    message(-1,NULL,"\n");
+    cprint(DEFAULT,-1,NULL,"\n-----------------------------------\n");
+    cprint(DEFAULT,-1,NULL,"=> In total %d items in database.",db_item_counter);    
+    cprint(DEFAULT,-1,NULL,"\n-----------------------------------\n");
+    cprint(DEFAULT,-1,NULL,"\n");
 }
 
-/*----------------------*/
+//////////////////////////////////////
 
 static void do_cache_interface(const char * operation, GlyrQuery * q, GlyrDatabase * db)
 {
@@ -705,8 +691,7 @@ static void do_cache_interface(const char * operation, GlyrQuery * q, GlyrDataba
 
     if(db == NULL)
     {
-        message(-1,NULL,"No database specified. Use --cache.\n");
-
+        cvprint(RED,"No database specified. Use --cache.\n");
         return;
     }
 
@@ -724,7 +709,7 @@ static void do_cache_interface(const char * operation, GlyrQuery * q, GlyrDataba
     if(g_ascii_strncasecmp(operation,dele_op,sizeof(dele_op) - 1) == 0)
     {
         int killed_items = glyr_db_delete(db,q);
-        message(1,NULL,"Deleted %d items from the db.",killed_items);
+        cvprint(BLUE,"Deleted %d items from the db.",killed_items);
 
         return;
     }
@@ -739,7 +724,7 @@ static void do_cache_interface(const char * operation, GlyrQuery * q, GlyrDataba
         while(iter != NULL)
         {
             glyr_cache_print(iter);
-            message(-1,NULL,"//////////////////////\n");
+            cvprint(BLUE,"//////////////////////\n");
             iter = iter->next;
         }
 
@@ -748,7 +733,7 @@ static void do_cache_interface(const char * operation, GlyrQuery * q, GlyrDataba
 }
 
 
-/*----------------------*/
+//////////////////////////////////////
 
 static bool parse_type_argument(const char * argvi, GlyrQuery * qp)
 {
@@ -761,10 +746,21 @@ static bool parse_type_argument(const char * argvi, GlyrQuery * qp)
         GLYR_GET_TYPE type = get_type_from_string(argvi);
         if(type == GLYR_GET_UNSURE)
         {
-            message(-1,NULL,"glyr: \"%s\" is not a know getter. See `glyrc -L` for a list.\n",argvi);
+            cvprint(RED,"Error: \"%s\" is not a know getter.\n",argvi);
+            cvprint(DEFAULT,"Currently available are:\n");
+            GlyrFetcherInfo * info = glyr_info_get();
+            GlyrFetcherInfo * iter = info;
+            while(iter != NULL)
+            {
+                cvprint(BLUE,"  * %s\n",iter->name);
+                iter = iter->next;
+            }
+            glyr_info_free(info);
+
             suggest_other_getter(qp,argvi);
-            message(-1,NULL,"\n");
+            cvprint(DEFAULT,"\nSee `glyrc -L` for a detailed list\n");
             retv = false;
+
         }
         else
         {
@@ -776,16 +772,55 @@ static bool parse_type_argument(const char * argvi, GlyrQuery * qp)
     return retv;
 }
 
-/*----------------------*/
+//////////////////////////////////////
 
+static GlyrMemCache * concatenate_list(GlyrMemCache * list)
+{
+    if(list == NULL)
+        return NULL;
+
+    GlyrMemCache * iter = list;
+    GlyrMemCache * retv = glyr_cache_copy(list);
+    gchar * concat_data = g_strdup("");
+
+    retv->duration = 0;
+
+    while(iter != NULL)
+    {
+        gchar * tmp = g_strdup_printf("%s%s\n",concat_data,iter->data);
+        g_free(concat_data);
+        concat_data = tmp;
+        retv->duration += iter->duration;
+        iter = iter->next;
+    }
+
+    retv->next = NULL;
+    retv->prev = NULL;
+
+    glyr_cache_set_data(retv,concat_data,-1);
+    glyr_free_list(list);
+    return retv;
+}
+
+//////////////////////////////////////
+
+static void global_cleanup(void)
+{
+    set_write_path(NULL);
+}
+
+//////////////////////////////////////
 
 int main(int argc, char * argv[])
 {
-    /* Set the loghandler (used by message()) */
-    g_log_set_handler(LOG_DOMAIN ,G_LOG_LEVEL_MASK |
-            G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION,
+    /* Set the loghandler (used by cprint(DEFAULT,)) */
+    g_log_set_handler(LOG_DOMAIN ,
+            G_LOG_LEVEL_MASK |
+            G_LOG_FLAG_FATAL |
+            G_LOG_FLAG_RECURSION,
             log_func, NULL);
 
+    atexit(global_cleanup);
     init_signals();
 
     /* Assume success */
@@ -793,7 +828,7 @@ int main(int argc, char * argv[])
 
     /* Init / Destroy of libglyr.
      * You _have_ to call this before making any calls 
-     * Both functions are not THREADSAFE!
+     * Both functions are not threadsafe!
      * */
     glyr_init();
     atexit(glyr_cleanup);
@@ -816,25 +851,41 @@ int main(int argc, char * argv[])
 
             parse_commandline_general(argc-1, argv+1, &my_query,&CBQueryData,&db);
             SET_IF_NULL(CBQueryData.output_path,".");
-            glyr_opt_dlcallback(&my_query, callback, &CBQueryData);
+
+            if(CBQueryData.as_one == false || glyr_type_is_image(my_query.type))
+            {
+                glyr_opt_dlcallback(&my_query, callback, &CBQueryData);
+            }
 
             /* Doing the 'hard' work here. */
             GlyrMemCache * my_list = glyr_get(&my_query, &get_error, &length);
 
             if(my_list != NULL)
             {
-                /* Free all downloaded buffers */
-                glyr_free_list(my_list);
-                message(2,&my_query,"# => %d item(s) in total.\n",length);
+                if(CBQueryData.as_one && glyr_type_is_image(my_query.type) == false)
+                {
+                    GlyrMemCache * concat = concatenate_list(my_list);
+                    glyr_opt_dlcallback(&my_query, callback, &CBQueryData);
+                    callback(concat,&my_query);
+
+                    glyr_cache_free(concat);
+                }
+                else
+                {
+                    /* Free all downloaded buffers */
+                    glyr_free_list(my_list);
+                    cprint(YELLOW,2,&my_query,"# => %d item%s in total.\n",length,length == 1 ? "" : "s");
+                }
             }
             else if(get_error == GLYRE_NO_PROVIDER)
             {
-                message(-1,NULL,"glyr: --from \"%s\" does not contain any valid provider.\nSee `glyrc -L` for a list.\n",my_query.from);
+                cvprint(RED,"Error `--from %s` does not contain any valid provider.\n",my_query.from);
+                cvprint(RED,"      See `glyrc -L` for a list.\n");
                 suggest_other_provider(&my_query,my_query.from);
             }
             else if(get_error != GLYRE_OK)
             {
-                message(1,&my_query,"E: %s\n",glyr_strerror(get_error));
+                cprint(RED,1,&my_query,"Error: %s\n",glyr_strerror(get_error));
             }
         }
 
@@ -861,10 +912,10 @@ int main(int argc, char * argv[])
         }
         else
         {
-            message(-1,NULL,"'cache': needs another argument:\n");
-            message(-1,NULL,"  * select [opts]\n");
-            message(-1,NULL,"  * delete [opts]\n");
-            message(-1,NULL,"  * list\n");
+            cvprint(RED,"Error: 'cache': needs another argument:\n");
+            cvprint(RED,"  * select [opts]\n");
+            cvprint(RED,"  * delete [opts]\n");
+            cvprint(RED,"  * list\n");
         }
     }
     else if(argc >= 2 && (!strcmp(argv[1],"-U") || !strcmp(argv[1],"--update")))
@@ -887,6 +938,6 @@ int main(int argc, char * argv[])
     return exit_code;
 }
 
-//* --------------------------------------------------------- */
+////////////////////////////////////////////////////////////////
 // ------------------End of program-------------------------- //
-/* ---------------------------------------------------------- */
+////////////////////////////////////////////////////////////////
