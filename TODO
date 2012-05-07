@@ -1,7 +1,3 @@
-Random points I need to rememeber for longer time:
---------------------------------------------------
-- fix various providers, with help of testscript -- done
-- testscripts -- primitively done
-- Delete gui, rewrite when learning ruby well enough
-- Delete translate feature -- done
-- update gmpc-glyros -- done
+- Keep providers updated :)
+- Replace cover:musicbrainz with coverartarchive once they got it working... (d'oh')
+- Fix magistrix and minor lyrics annoyance

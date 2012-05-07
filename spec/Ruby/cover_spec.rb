@@ -47,7 +47,7 @@ describe "cover" do
 
 			list.should be_an_instance_of Array
 			list.first.should be_an_instance_of Glyros::GlyrMemCache
-			list.size.should equal 1
+			list.size.should == 1
 
 			show_in_sxiv(list.first)
 		end
@@ -58,7 +58,7 @@ describe "cover" do
 			list = @spit.get
 
 			list.should be_an_instance_of Array
-			list.size.should equal 0
+			list.size.should == 0
 		end
 	end
 
@@ -74,7 +74,7 @@ describe "cover" do
 
 			list.should be_an_instance_of Array
 			list.first.should be_an_instance_of Glyros::GlyrMemCache
-			list.size.should equal 1
+			list.size.should == 1
 
 			show_in_sxiv(list.first)
 		end
@@ -85,7 +85,7 @@ describe "cover" do
 			list = @spit.get
 
 			list.should be_an_instance_of Array
-			list.size.should equal 0
+			list.size.should == 0
 		end
 	end
 
@@ -101,7 +101,7 @@ describe "cover" do
 
 			list.should be_an_instance_of Array
 			list.first.should be_an_instance_of Glyros::GlyrMemCache
-			list.size.should equal 1
+			list.size.should == 1
 
 			show_in_sxiv(list.first)
 		end
@@ -112,40 +112,9 @@ describe "cover" do
 			list = @spit.get
 
 			list.should be_an_instance_of Array
-			list.size.should equal 0
+			list.size.should == 0
 		end
 	end
-
-=begin
-	describe "amazon" do
-		before :each do
-			@spit.from = "amazon"
-		end
-		
-		it "should test a pagehit" do
-			@spit.artist = "Adele"
-			@spit.album  = "21"
-			list = @spit.get
-
-			list.should be_an_instance_of Array
-			list.first.should be_an_instance_of Glyros::GlyrMemCache
-			list.size.should equal 1
-
-			show_in_sxiv(list.first)
-		end
-
-		it "Don't know this cover" do
-			@spit.artist = "The band they called horst"
-			@spit.album  = "Album"
-			list = @spit.get
-
-			list.should be_an_instance_of Array
-			list.size.should equal 0
-		end
-	end
-=end
-
-	# coverhnt seems to be down.
 
 	describe "discogs" do
 		before :each do
@@ -159,7 +128,7 @@ describe "cover" do
 
 			list.should be_an_instance_of Array
 			list.first.should be_an_instance_of Glyros::GlyrMemCache
-			list.size.should equal 1
+			list.size.should == 1
 
 			show_in_sxiv(list.first)
 		end
@@ -170,7 +139,7 @@ describe "cover" do
 			list = @spit.get
 
 			list.should be_an_instance_of Array
-			list.size.should equal 0
+			list.size.should == 0
 		end
 	end
 
@@ -186,7 +155,7 @@ describe "cover" do
 
 			list.should be_an_instance_of Array
 			list.first.should be_an_instance_of Glyros::GlyrMemCache
-			list.size.should equal 1
+			list.size.should == 1
 
 			show_in_sxiv(list.first)
 		end
@@ -197,7 +166,7 @@ describe "cover" do
 			list = @spit.get
 
 			list.should be_an_instance_of Array
-			list.size.should equal 0
+			list.size.should == 0
 		end
 	end
 
@@ -213,7 +182,7 @@ describe "cover" do
 
 			list.should be_an_instance_of Array
 			list.first.should be_an_instance_of Glyros::GlyrMemCache
-			list.size.should equal 1
+			list.size.should == 1
 
 			show_in_sxiv(list.first)
 		end
@@ -227,7 +196,7 @@ describe "cover" do
 			list = @spit.get
 
 			list.should be_an_instance_of Array
-			list.size.should equal 0
+			list.size.should == 0
 		end
 	end
 
@@ -243,7 +212,7 @@ describe "cover" do
 
 			list.should be_an_instance_of Array
 			list.first.should be_an_instance_of Glyros::GlyrMemCache
-			list.size.should equal 1
+			list.size.should == 1
 
 			show_in_sxiv(list.first)
 		end
@@ -257,7 +226,7 @@ describe "cover" do
 			list = @spit.get
 
 			list.should be_an_instance_of Array
-			list.size.should equal 0
+			list.size.should == 0
 		end
 	end
 
@@ -272,7 +241,7 @@ describe "cover" do
 			list = @spit.get
 
 			list.should be_an_instance_of Array
-			list.size.should equal 1
+			list.size.should == 1
 			list.first.should be_an_instance_of Glyros::GlyrMemCache
 
 			show_in_sxiv(list.first)
@@ -284,7 +253,7 @@ describe "cover" do
 			list = @spit.get
 
 			list.should be_an_instance_of Array
-			list.size.should equal 0
+			list.size.should == 0
 		end
 	end
 	
@@ -312,7 +281,7 @@ describe "cover" do
 			list = @spit.get
 
 			list.should be_an_instance_of Array
-			list.size.should equal 0
+			list.size.should == 0
 		end
 	end
 	
@@ -328,7 +297,7 @@ describe "cover" do
 
 			list.should be_an_instance_of Array
 			list.first.should be_an_instance_of Glyros::GlyrMemCache
-			list.size.should equal 1
+			list.size.should == 1
 
 			show_in_sxiv(list.first)
 		end
@@ -342,7 +311,37 @@ describe "cover" do
 			list = @spit.get
 
 			list.should be_an_instance_of Array
-			list.size.should equal 0
+			list.size.should == 0
+		end
+	end
+ 
+    describe "slothradio" do
+		before :each do
+			@spit.from = "slothradio"
+		end
+		
+		it "should test a pagehit" do
+			@spit.artist = "Akrea"
+			@spit.album  = "Lebenslinie"
+			list = @spit.get
+
+			list.should be_an_instance_of Array
+			list.first.should be_an_instance_of Glyros::GlyrMemCache
+			list.size.should == 1
+
+			show_in_sxiv(list.first)
+		end
+
+		it "Don't know this cover" do
+			@spit.artist = "RandomArtist" 
+
+			# Yes, Im cheating here, but did you tried to 
+			# get 0 results with an valid album name? no?
+			@spit.album  = "Bloghregnfehegle"
+			list = @spit.get
+
+			list.should be_an_instance_of Array
+			list.size.should == 0
 		end
 	end
 end

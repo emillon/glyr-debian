@@ -18,7 +18,7 @@
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
 #ifndef GLYR_H
-#define GLYR_H
+#define GLYR_GLYR_H
 
 /**
  * SECTION:glyr
@@ -1034,6 +1034,8 @@ void glyr_string_to_md5sum(const char * string, unsigned char * md5sum);
  * Returns: A bitmask out of members of GLYR_FIELD_REQUIREMENT
  */
 GLYR_FIELD_REQUIREMENT glyr_get_requirements(GLYR_GET_TYPE type);
+
+bool glyr_type_is_image(GLYR_GET_TYPE type);
 
 #ifdef __cplusplus
 }
