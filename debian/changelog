@@ -1,9 +1,6 @@
 glyr (0.9.9-1) unstable; urgency=low
 
   * Initial release (Closes: #651416).
-  * Patches:
-    - Set correct build flags (-O2 -g)
-    - Fix a memory allocation bug
-    - Restrict symbols visibility
+  * Add a patch to set correct build flags (-O2 -g)
 
  -- Etienne Millon <etienne.millon@gmail.com>  Mon, 07 May 2012 17:09:00 +0200
