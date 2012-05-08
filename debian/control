@@ -10,6 +10,8 @@ Build-Depends: cmake,
 Standards-Version: 3.9.3
 Section: libs
 Homepage: http://github.com/sahib/glyr
+Vcs-Git: git://git.debian.org/users/emillon-guest/glyr.git
+Vcs-Browser: http://anonscm.debian.org/gitweb/?p=users/emillon-guest/glyr.git
 
 Package: libglyr1
 Architecture: any
