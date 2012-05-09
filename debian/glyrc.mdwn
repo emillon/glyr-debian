@@ -1,6 +1,6 @@
 % glyrc(1)
 % Etienne Millon
-% Apr 2 2012
+% May 9 2012
 
 NAME
 ====
@@ -37,6 +37,25 @@ Providers from where to get metadata. Refer to glyrc --list for a full list
 #### \-w \-\-write Path
 Write metadata to the dir d, or filename d, special values stdout, stderr
 and null are supported.
+
+Certain escapes are escaped inside the filename in the form :X:, where X may be one of:
+
+   - type     : The getter used in this query (e.g. cover)
+   - artist   : Artist - as passed by -a
+   - album    : Album  - as passed by -b
+   - title    : Title  - as passed by -t
+   - size     : Size in bytes
+   - format   : The image format or 'txt' for textitems
+   - source   : The source URL of this item
+   - prov     : The Provider of this item
+   - cksum    : a md5sum of the data
+   - rating   : (Usually 0)
+   - duration : (Only for tracks) Duration in seconds
+   - number   : An index incremented with each item (starting with 1)
+
+The default format is ':artist:_:album:_:title:_:type:_:number:.:format:'
+Strings containing '/' are replaced with '|' automatically,
+so --write ':artist:' for AC/DC will result in AC|DC
 
 #### \-n \-\-number Integer
 Download max. n items. Amount of actual downloaded items may be less.
@@ -121,6 +140,20 @@ Print the version string.
 
 #### \-U \-\-update
 Updates libglyr if new version is available.
+
+#### \-g \-\-as\-one
+(Textitems only) Output all results as one (useful for tracklist and albumlist).
+
+#### \-G \-\-no\-as\-one
+Disables \-\-as-one (Default)
+
+#### \-y \-\-color
+
+Enables colored output for glyrc (Default)
+
+#### \-Y \-\-no-color
+
+Prints no colored output
 
 #### \-s \-\-musictree\-path p
 p is a path to your music directory. Glyr might fetch things like folger.jpg from there
