@@ -182,21 +182,21 @@ Needs --cache.
 EXAMPLES
 ========
 
-    glyrc cover \-\-artist SomeBand \-\-album SomeAlbum
+    glyrc cover --artist SomeBand --album SomeAlbum
 
 DB:
 
     # Write found items to cache; create it if not existant
-    glyrc lyrics \-a A \-b B \-\-cache /tmp
+    glyrc lyrics -a A -b B --cache /tmp
 
     # List all in the cache
-    glyrc cache list \-\-cache /tmp
+    glyrc cache list --cache /tmp
 
     # Delete artist/album
-    glyrc cache delete cover \-a Equilibrium \-b Sagas \-\-cache /tmp
+    glyrc cache delete cover -a Equilibrium -b Sagas --cache /tmp
 
     # Search for two items in cache and print them
-    glyrc cache select lyrics \-a Knorkator \-t 'A' \-n 2 \-\-cache /tmp
+    glyrc cache select lyrics -a Knorkator -t 'A' -n 2 --cache /tmp
 
 With each item received you get a link to the original source, please refer to
 the individual terms of use, copying and distributing of this data might be not
