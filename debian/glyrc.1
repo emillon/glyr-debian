@@ -52,11 +52,11 @@ may be one of:
 .IP \[bu] 2
 type : The getter used in this query (e.g.\ cover)
 .IP \[bu] 2
-artist : Artist - as passed by -a
+artist : Artist \- as passed by \-a
 .IP \[bu] 2
-album : Album - as passed by -b
+album : Album \- as passed by \-b
 .IP \[bu] 2
-title : Title - as passed by -t
+title : Title \- as passed by \-t
 .IP \[bu] 2
 size : Size in bytes
 .IP \[bu] 2
@@ -173,7 +173,7 @@ Updates libglyr if new version is available.
 albumlist).
 .SS -G --no-as-one
 .PP
-Disables --as-one (Default)
+Disables \-\-as-one (Default)
 .SS -y --color
 .PP
 Enables colored output for glyrc (Default)
@@ -210,7 +210,7 @@ Needs \[em]cache.
 .IP
 .nf
 \f[C]
-glyrc\ cover\ --artist\ SomeBand\ --album\ SomeAlbum
+glyrc\ cover\ \-\-artist\ SomeBand\ \-\-album\ SomeAlbum
 \f[]
 .fi
 .PP
@@ -219,16 +219,16 @@ DB:
 .nf
 \f[C]
 #\ Write\ found\ items\ to\ cache;\ create\ it\ if\ not\ existant
-glyrc\ lyrics\ -a\ A\ -b\ B\ --cache\ /tmp
+glyrc\ lyrics\ \-a\ A\ \-b\ B\ \-\-cache\ /tmp
 
 #\ List\ all\ in\ the\ cache
-glyrc\ cache\ list\ --cache\ /tmp
+glyrc\ cache\ list\ \-\-cache\ /tmp
 
 #\ Delete\ artist/album
-glyrc\ cache\ delete\ cover\ -a\ Equilibrium\ -b\ Sagas\ --cache\ /tmp
+glyrc\ cache\ delete\ cover\ \-a\ Equilibrium\ \-b\ Sagas\ \-\-cache\ /tmp
 
 #\ Search\ for\ two\ items\ in\ cache\ and\ print\ them
-glyrc\ cache\ select\ lyrics\ -a\ Knorkator\ -t\ \[aq]A\[aq]\ -n\ 2\ --cache\ /tmp
+glyrc\ cache\ select\ lyrics\ \-a\ Knorkator\ \-t\ \[aq]A\[aq]\ \-n\ 2\ \-\-cache\ /tmp
 \f[]
 .fi
 .PP
