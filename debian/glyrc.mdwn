@@ -1,5 +1,5 @@
 % glyrc(1)
-% Etienne Millon
+% Christopher Pahl <sahib@online.de>, Etienne Millon
 % May 9 2012
 
 NAME
@@ -204,8 +204,3 @@ allowed.
 
 A more detailed version of this help can be found online:
 https://github.com/sahib/glyr/wiki/Commandline\-arguments
-
-AUTHORS
-=======
-
-(C) Christopher Pahl \- 2011, <sahib@online.de>
