@@ -1,11 +1,12 @@
 Source: glyr
 Priority: extra
 Maintainer: Etienne Millon <etienne.millon@gmail.com>
-Build-Depends: cmake,
-               debhelper (>= 8.0.0),
-               libcurl4-gnutls-dev | libcurl-dev,
-               libglib2.0-dev,
-               libsqlite3-dev
+Build-Depends:
+ cmake,
+ debhelper (>= 8.0.0),
+ libcurl4-gnutls-dev | libcurl-dev,
+ libglib2.0-dev,
+ libsqlite3-dev
 Standards-Version: 3.9.3
 Section: libs
 Homepage: http://github.com/sahib/glyr
@@ -14,7 +15,9 @@ Vcs-Browser: http://anonscm.debian.org/gitweb/?p=users/emillon-guest/glyr.git
 
 Package: libglyr1
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends}
 Description: search engine for music-related metadata
  Glyr is a library to retrieve music-related metadata from several
  online providers (Amazon, Discogs, Musicbrainz...).
@@ -25,7 +28,9 @@ Description: search engine for music-related metadata
 Package: libglyr1-dbg
 Section: debug
 Architecture: any
-Depends: libglyr1 (= ${binary:Version}), ${misc:Depends}
+Depends:
+ libglyr1 (= ${binary:Version}),
+ ${misc:Depends}
 Description: search engine for music-related metadata - debugging symbols
  Glyr is a library to retrieve music-related metadata from several
  online providers (Amazon, Discogs, Musicbrainz...).
@@ -38,7 +43,9 @@ Description: search engine for music-related metadata - debugging symbols
 Package: libglyr-dev
 Section: libdevel
 Architecture: any
-Depends: libglyr1 (= ${binary:Version}), ${misc:Depends}
+Depends:
+ libglyr1 (= ${binary:Version}),
+ ${misc:Depends}
 Description: search engine for music-related metadata - development files
  Glyr is a library to retrieve music-related metadata from several
  online providers (Amazon, Discogs, Musicbrainz...).
@@ -52,7 +59,9 @@ Description: search engine for music-related metadata - development files
 Package: glyrc
 Section: sound
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends}
 Description: command-line interface to libglyr
  Glyr is a library to retrieve music-related metadata from several
  online providers (Amazon, Discogs, Musicbrainz...).
