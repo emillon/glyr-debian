@@ -5,7 +5,7 @@ export LDFLAGS=-Wl,--as-needed
 	dh $@ 
 
 override_dh_compress:
-	dh_compress -Xasync_queue.c
+	dh_compress -Xasync_queue.c -Xexample.c
 
 override_dh_fixperms:
 	chmod a-x debian/libglyr-dev/usr/share/doc/libglyr-dev/examples/async_queue.c
