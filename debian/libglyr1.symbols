@@ -49,6 +49,7 @@ libglyr.so.1 libglyr1 #MINVER#
  glyr_opt_lang_aware_only@Base 0.9.9
  glyr_opt_lookup_db@Base 0.9.9
  glyr_opt_musictree_path@Base 0.9.9
+ glyr_opt_normalize@Base 1.0.0
  glyr_opt_number@Base 0.9.9
  glyr_opt_parallel@Base 0.9.9
  glyr_opt_plugmax@Base 0.9.9
@@ -64,6 +65,8 @@ libglyr.so.1 libglyr1 #MINVER#
  glyr_query_init@Base 0.9.9
  glyr_signal_exit@Base 0.9.9
  glyr_strerror@Base 0.9.9
+ glyr_string_to_data_type@Base 1.0.0
+ glyr_string_to_get_type@Base 1.0.0
  glyr_string_to_md5sum@Base 0.9.9
  glyr_testing_call_parser@Base 0.9.9
  glyr_testing_call_url@Base 0.9.9
