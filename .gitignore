@@ -3,6 +3,14 @@
 *.so
 __pycache__/
 *.pyc
+*.patch
+*.cmake
+core
+*.gch
+libglyr.pc
+doc/doc
+doc/build
+spec/provider/results/
 
 # Ignore documentation, local working directory
 child/

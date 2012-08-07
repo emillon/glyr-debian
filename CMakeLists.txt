@@ -36,10 +36,10 @@ ENDIF()
 # ------------------------------------------------
 # Versioning 
 # ------------------------------------------------
-SET(GLYR_VERSION_MAJOR "0")
-SET(GLYR_VERSION_MINOR "9")
-SET(GLYR_VERSION_MICRO "9")
-SET(GLYR_VERSION_NAME  "Catholic Cat")
+SET(GLYR_VERSION_MAJOR "1")
+SET(GLYR_VERSION_MINOR "0")
+SET(GLYR_VERSION_MICRO "0")
+SET(GLYR_VERSION_NAME  "Bloody Boar")
 # ------------------------------------------------
 
 
@@ -143,30 +143,30 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_INTERN}/guitartabs.c"
 	"${DIR_INTERN}/backdrops.c"
 	# extensions
+	"${DIR_INTERN}/common/mbid_lookup.c"
 	"${DIR_INTERN}/common/google.c"
 	"${DIR_INTERN}/common/amazon.c"
 	"${DIR_INTERN}/common/picsearch.c"
 	"${DIR_INTERN}/common/musicbrainz.c"
 	"${DIR_AINFO}/lastfm.c"
-	"${DIR_AINFO}/allmusic_com.c"
+	"${DIR_AINFO}/bbcmusic.c"
 	"${DIR_AINFO}/lyricsreg.c"
 	"${DIR_SIMILAR}/lastfm.c"
 	"${DIR_SIMILSO}/lastfm.c"
 	"${DIR_TRACKLIST}/musicbrainz.c"
-	"${DIR_REVIEW}/allmusic_com.c"
 	"${DIR_REVIEW}/amazon.c"
 	"${DIR_REVIEW}/metallum.c"
 	"${DIR_ALBUMLIST}/musicbrainz.c"
 	"${DIR_RELATIONS}/musicbrainz.c"
 	"${DIR_RELATIONS}/generated.c"
 	"${DIR_TAGS}/musicbrainz.c"
+	"${DIR_COVER}/coverartarchive.c"
 	"${DIR_COVER}/lastfm.c"
 	"${DIR_COVER}/jamendo.c"
 	"${DIR_COVER}/google.c"
 	"${DIR_COVER}/coverhunt.c"
 	"${DIR_COVER}/lyricswiki.c"
 	"${DIR_COVER}/albumart.c"
-	"${DIR_COVER}/allmusic_com.c"
 	"${DIR_COVER}/discogs.c"
 	"${DIR_COVER}/amazon.c"
 	"${DIR_COVER}/rhapsody.c"
@@ -192,6 +192,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_PHOTOS}/singerpictures.c"
 	"${DIR_PHOTOS}/rhapsody.c"
 	"${DIR_PHOTOS}/picsearch.c"
+	"${DIR_PHOTOS}/bbcmusic.c"
 	"${DIR_GUITARTABS}/guitaretab.c"
 	"${DIR_GUITARTABS}/chordie_com.c"
     "${DIR_BACKDROPS}/htbackdrops.c"
@@ -210,8 +211,7 @@ ADD_SUBDIRECTORY( ${SUBDIR_SRC} )
 
 IF(DEFINED TEST)
     MESSAGE("-- Building with tests: ${TEST}")
-    ADD_SUBDIRECTORY( spec/C )
-    ADD_CUSTOM_TARGET(test COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/spec/run.rb" DEPENDS check_api)
+    ADD_SUBDIRECTORY( spec/capi )
 ENDIF()
 
 # ------------------------------------------------
