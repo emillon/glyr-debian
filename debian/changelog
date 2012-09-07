@@ -3,4 +3,4 @@ glyr (1.0.0-1) unstable; urgency=low
   * Initial release (Closes: #651416).
   * Add a patch to set correct build flags (-O2 -g)
 
- -- Etienne Millon <etienne.millon@gmail.com>  Wed, 22 Aug 2012 14:11:34 +0200
+ -- Etienne Millon <etienne.millon@gmail.com>  Fri, 07 Sep 2012 17:02:22 +0200
