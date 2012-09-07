@@ -5,9 +5,11 @@ Uploaders: Etienne Millon <etienne.millon@gmail.com>
 Build-Depends:
  cmake,
  debhelper (>= 9),
+ gtk-doc-tools,
  libcurl4-gnutls-dev | libcurl-dev,
  libglib2.0-dev,
- libsqlite3-dev
+ libsqlite3-dev,
+ ruby
 Standards-Version: 3.9.3
 Section: libs
 Homepage: http://github.com/sahib/glyr
