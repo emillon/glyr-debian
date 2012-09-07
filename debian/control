@@ -1,6 +1,7 @@
 Source: glyr
 Priority: optional
-Maintainer: Etienne Millon <etienne.millon@gmail.com>
+Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
+Uploaders: Etienne Millon <etienne.millon@gmail.com>
 Build-Depends:
  cmake,
  debhelper (>= 9),
