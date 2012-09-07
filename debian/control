@@ -1,5 +1,5 @@
 Source: glyr
-Priority: extra
+Priority: optional
 Maintainer: Etienne Millon <etienne.millon@gmail.com>
 Build-Depends:
  cmake,
@@ -27,6 +27,7 @@ Description: search engine for music-related metadata
 
 Package: libglyr1-dbg
 Section: debug
+Priority: extra
 Architecture: any
 Depends:
  libglyr1 (= ${binary:Version}),
