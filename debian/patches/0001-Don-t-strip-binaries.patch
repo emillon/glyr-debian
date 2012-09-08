@@ -6,11 +6,9 @@ Subject: Don't strip binaries
  CMakeLists.txt |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 63f2024..5096d90 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -62,7 +62,7 @@ IF(CMAKE_COMPILER_IS_GNUCC)
+@@ -62,7 +62,7 @@
  ENDIF()
  
  SET(COMMON_FLAGS "${GCC_ONLY_FLAGS} -Wall -Wextra -Wstrict-prototypes -W -Wno-unused-parameter -Wno-strict-prototypes -fvisibility=hidden")
