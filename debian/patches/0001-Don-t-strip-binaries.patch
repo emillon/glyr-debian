@@ -2,6 +2,11 @@ From: Etienne Millon <etienne.millon@gmail.com>
 Date: Sun, 1 Apr 2012 22:21:51 +0200
 Subject: Don't strip binaries
 
+The upstream build system should not strip binaries, so that it is possible to
+build a debug package (or skip stripping with DEB_BUILD_OPTIONS=nostrip).
+
+Origin: vendor
+Forwarded: not-needed
 ---
  CMakeLists.txt |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
