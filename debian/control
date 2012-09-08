@@ -35,6 +35,7 @@ Package: libglyr1-dbg
 Section: debug
 Priority: extra
 Architecture: any
+Multi-Arch: same
 Depends:
  libglyr1 (= ${binary:Version}),
  ${misc:Depends}
@@ -50,6 +51,7 @@ Description: search engine for music-related metadata - debugging symbols
 Package: libglyr-dev
 Section: libdevel
 Architecture: any
+Multi-Arch: same
 Depends:
  libglyr1 (= ${binary:Version}),
  ${misc:Depends}
