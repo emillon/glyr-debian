@@ -8,6 +8,10 @@ DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 override_dh_auto_configure:
 	dh_auto_configure -- -DINSTALL_LIB_DIR=lib/$(DEB_BUILD_MULTIARCH)
 
+override_dh_auto_build:
+	dh_auto_build
+	cd doc ; ruby build_doc.rb
+
 override_dh_compress:
 	dh_compress -Xasync_queue.c -Xexample.c
 
@@ -17,7 +21,3 @@ override_dh_fixperms:
 	
 override_dh_strip:
 	dh_strip --dbg-package=libglyr1-dbg
-
-override_dh_installdocs:
-	cd doc ; ruby build_doc.rb
-	dh_installdocs
