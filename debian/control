@@ -53,7 +53,10 @@ Section: libdevel
 Architecture: any
 Multi-Arch: same
 Depends:
+ libcurl4-gnutls-dev | libcurl-dev,
+ libglib2.0-dev,
  libglyr1 (= ${binary:Version}),
+ libsqlite3-dev,
  ${misc:Depends}
 Description: search engine for music-related metadata - development files
  Glyr is a library to retrieve music-related metadata from several
