@@ -59,6 +59,8 @@ Depends:
  libglyr1 (= ${binary:Version}),
  libsqlite3-dev,
  ${misc:Depends}
+Recommends:
+ libglyr-doc
 Description: search engine for music-related metadata - development files
  Glyr is a library to retrieve music-related metadata from several
  online providers (Amazon, Discogs, Musicbrainz...).
@@ -68,6 +70,24 @@ Description: search engine for music-related metadata - development files
  .
  This package contains the header files necessary to build applications using
  libglyr.
+
+Package: libglyr-doc
+Section: doc
+Architecture: all
+Breaks:
+ libglyr-dev (<< 1.0.0-2)
+Replaces:
+ libglyr-dev (<< 1.0.0-2)
+Depends:
+ ${misc:Depends}
+Description: search engine for music-related metadata - documentation
+ Glyr is a library to retrieve music-related metadata from several
+ online providers (Amazon, Discogs, Musicbrainz...).
+ .
+ It can be used in media player programs to download cover art, lyrics,
+ biography and much more.
+ .
+ This package contains the documentation for developing with libglyr.
 
 Package: glyrc
 Section: sound

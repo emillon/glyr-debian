@@ -16,7 +16,7 @@ override_dh_compress:
 	dh_compress -Xasync_queue.c -Xexample.c
 
 override_dh_fixperms:
-	chmod a-x debian/libglyr-dev/usr/share/doc/libglyr-dev/examples/async_queue.c
+	chmod a-x debian/libglyr-doc/usr/share/doc/libglyr-doc/examples/async_queue.c
 	dh_fixperms
 	
 override_dh_strip:
