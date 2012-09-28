@@ -1,3 +1,13 @@
+glyr (1.0.0-2) unstable; urgency=low
+
+  * Version dependency on ruby (Closes: #688841)
+  * Move documentation to its own package (Closes: #688821)
+  * Don't build documentation package if b-d-indep are not installed
+    (Closes: #688899)
+  * Bump Standards-Version to 3.9.4 (no changes needed)
+
+ -- Etienne Millon <etienne.millon@gmail.com>  Fri, 28 Sep 2012 17:58:45 +0200
+
 glyr (1.0.0-1) unstable; urgency=low
 
   * Initial release (Closes: #651416).
