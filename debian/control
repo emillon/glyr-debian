@@ -6,10 +6,11 @@ Uploaders:
 Build-Depends:
  cmake,
  debhelper (>= 9),
- gtk-doc-tools,
  libcurl4-gnutls-dev | libcurl-dev,
  libglib2.0-dev,
  libsqlite3-dev,
+Build-Depends-Indep:
+ gtk-doc-tools,
  ruby (>= 4.9)
 Standards-Version: 3.9.3
 Section: libs
