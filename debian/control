@@ -59,7 +59,7 @@ Depends:
  libglyr1 (= ${binary:Version}),
  libsqlite3-dev,
  ${misc:Depends}
-Recommends:
+Suggests:
  libglyr-doc
 Description: search engine for music-related metadata - development files
  Glyr is a library to retrieve music-related metadata from several
