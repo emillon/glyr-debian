@@ -1,3 +1,9 @@
+glyr (1.0.0-3) unstable; urgency=low
+
+  * Fix permissions of example file only if it exists (fixes FTBFS)
+
+ -- Etienne Millon <etienne.millon@gmail.com>  Sat, 29 Sep 2012 21:54:05 +0200
+
 glyr (1.0.0-2) unstable; urgency=low
 
   * Version dependency on ruby (Closes: #688841)
