@@ -1,3 +1,9 @@
+glyr (1.0.0-4) unstable; urgency=low
+
+  * Don't change mode of example (fixes FTBFS)
+
+ -- Etienne Millon <etienne.millon@gmail.com>  Mon, 01 Oct 2012 00:44:16 +0200
+
 glyr (1.0.0-3) unstable; urgency=low
 
   * Fix permissions of example file only if it exists (fixes FTBFS)
