@@ -17,11 +17,5 @@ endif
 override_dh_compress:
 	dh_compress -Xasync_queue.c -Xexample.c
 
-ASYNC_QUEUE=debian/libglyr-doc/usr/share/doc/libglyr-doc/examples/async_queue.c
-
-override_dh_fixperms:
-	[ -e $(ASYNC_QUEUE) ] && chmod a-x $(ASYNC_QUEUE)
-	dh_fixperms
-	
 override_dh_strip:
 	dh_strip --dbg-package=libglyr1-dbg
