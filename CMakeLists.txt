@@ -38,7 +38,7 @@ ENDIF()
 # ------------------------------------------------
 SET(GLYR_VERSION_MAJOR "1")
 SET(GLYR_VERSION_MINOR "0")
-SET(GLYR_VERSION_MICRO "0")
+SET(GLYR_VERSION_MICRO "1")
 SET(GLYR_VERSION_NAME  "Bloody Boar")
 # ------------------------------------------------
 
@@ -109,6 +109,7 @@ SET(DIR_TAGS ${DIR_INTERN}/tags )
 SET(DIR_RELATIONS ${DIR_INTERN}/relations )
 SET(DIR_GUITARTABS ${DIR_INTERN}/guitartabs )
 SET(DIR_BACKDROPS ${DIR_INTERN}/backdrops )
+SET(DIR_JSMN ${DIR_ROOT}/jsmn )
 
 # ------------------------------------------------
 # Set source locations
@@ -127,6 +128,8 @@ SET(LIB_SOURCE_LOCATIONS
     # "Builtin" special providers
 	"${DIR_INTERN}/cache/db_provider.c"
 	"${DIR_INTERN}/musictree/musictree.c"
+    # jsmn
+    "${DIR_JSMN}/jsmn.c"
 	# fetcher
 	"${DIR_INTERN}/generic.c"
 	"${DIR_INTERN}/ainfo.c"
@@ -149,12 +152,14 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_INTERN}/common/picsearch.c"
 	"${DIR_INTERN}/common/musicbrainz.c"
 	"${DIR_AINFO}/lastfm.c"
+	"${DIR_AINFO}/echonest.c"
 	"${DIR_AINFO}/bbcmusic.c"
 	"${DIR_AINFO}/lyricsreg.c"
 	"${DIR_SIMILAR}/lastfm.c"
 	"${DIR_SIMILSO}/lastfm.c"
 	"${DIR_TRACKLIST}/musicbrainz.c"
 	"${DIR_REVIEW}/amazon.c"
+    "${DIR_REVIEW}/echonest.c"
 	"${DIR_REVIEW}/metallum.c"
 	"${DIR_ALBUMLIST}/musicbrainz.c"
 	"${DIR_RELATIONS}/musicbrainz.c"

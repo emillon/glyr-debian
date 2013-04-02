@@ -54,6 +54,7 @@ extern MetaDataFetcher glyrFetcher_backdrops;
 extern MetaDataSource ainfo_lastfm_src;
 extern MetaDataSource ainfo_lyricsreg_src;
 extern MetaDataSource ainfo_bbcmusic_src;
+extern MetaDataSource ainfo_echonest_src;
 extern MetaDataSource albumlist_musicbrainz_src;
 extern MetaDataSource cover_coverartarchive_src;
 extern MetaDataSource cover_albumart_src;
@@ -90,6 +91,7 @@ extern MetaDataSource photos_picsearch_src;
 extern MetaDataSource photos_bbcmusic_src;
 extern MetaDataSource relations_musicbrainz_src;
 extern MetaDataSource review_amazon_src;
+extern MetaDataSource review_echonest_src;
 extern MetaDataSource review_metallum_src;
 extern MetaDataSource similar_artist_lastfm_src;
 extern MetaDataSource similar_song_lastfm_src;
@@ -142,6 +144,7 @@ static void register_provider_plugins (void)
     plugin_add_to_list (&glyrMetaDataSourceList,&ainfo_lastfm_src);
     plugin_add_to_list (&glyrMetaDataSourceList,&ainfo_lyricsreg_src);
     plugin_add_to_list (&glyrMetaDataSourceList,&ainfo_bbcmusic_src);
+    plugin_add_to_list (&glyrMetaDataSourceList,&ainfo_echonest_src);
     plugin_add_to_list (&glyrMetaDataSourceList,&albumlist_musicbrainz_src);
 
     // FIXME: Seems to be broken too. (serverside)
@@ -155,7 +158,7 @@ static void register_provider_plugins (void)
 
 
     // FIXME: No real data yet there.. adele:19 gives a correct mbid, but no results
-    //plugin_add_to_list(&glyrMetaDataSourceList,&cover_coverartarchive_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&cover_coverartarchive_src);
 
     plugin_add_to_list (&glyrMetaDataSourceList,&cover_discogs_src);
     plugin_add_to_list (&glyrMetaDataSourceList,&cover_google_src);
@@ -195,6 +198,7 @@ static void register_provider_plugins (void)
     // FIXME: Silly amazon requires to be a Seller to use their API
     //plugin_add_to_list(&glyrMetaDataSourceList,&review_amazon_src);
     plugin_add_to_list (&glyrMetaDataSourceList,&review_metallum_src);
+    plugin_add_to_list (&glyrMetaDataSourceList,&review_echonest_src);
     plugin_add_to_list (&glyrMetaDataSourceList,&similar_artist_lastfm_src);
     plugin_add_to_list (&glyrMetaDataSourceList,&similar_song_lastfm_src);
     plugin_add_to_list (&glyrMetaDataSourceList,&tags_musicbrainz_src);
