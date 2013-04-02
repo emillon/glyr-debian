@@ -413,13 +413,17 @@ gchar * prepare_url (const gchar * URL, GlyrQuery * s, gboolean do_curl_escape)
         else
             p_title  = prepare_string (s->title, GLYR_NORMALIZE_NONE, do_curl_escape);
 
+        gchar * p_num = g_strdup_printf("%d", s->number * 3);
+
         swap_string (&tmp,"${artist}",p_artist);
         swap_string (&tmp,"${album}", p_album);
         swap_string (&tmp,"${title}", p_title);
+        swap_string (&tmp,"${number}", p_num);
 
         g_free (p_artist);
         g_free (p_album);
         g_free (p_title);
+        g_free (p_num);
         g_free (unwinded_artist);
     }
     return tmp;
@@ -456,13 +460,17 @@ gchar * get_next_word (const gchar * string, const gchar * delim, gsize *offset,
 
 ///////////////////////////////////////
 
-static int convert_to_number (const gchar * string)
+static int convert_to_char(const gchar * string)
 {
     if (string != NULL)
     {
-        return strtoul (string, NULL, (string[0] == 'x' || string[0] == 'X' ) ? 16 : 10);
+        if (string[0] == 'x' || string[0] == 'X') {
+            return strtoul (string + 1, NULL, 16);
+        } else {
+            return strtoul (string, NULL, 10);
+        }
     }
-    return 0;
+    return ' ';
 }
 
 /* Translate HTML UTF8 marks to normal UTF8 (&#xFF; or e.g. &#123; -> char 123) */
@@ -482,7 +490,7 @@ char *unescape_html_UTF8 (const char * data)
             char * semicol = NULL;
             if (data[i] == '&' && data[i+1] == '#' && (semicol = strstr (data+i,";") ) != NULL)
             {
-                int n = convert_to_number (&data[i+2]);
+                int n = convert_to_char(&data[i+2]);
 
                 if (n >= 0x800)
                 {

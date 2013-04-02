@@ -1,7 +1,7 @@
 /**
  * SECTION:config
  * @short_description: Compiletime Information
- * @title: Config
+ * @title: Config 
  * @section_id:
  * @stability: Stable
  * @include: glyr/config.h
@@ -12,11 +12,11 @@
 
 #define GLYR_VERSION_MAJOR "1"
 #define GLYR_VERSION_MINOR "0"
-#define GLYR_VERSION_MICRO "0"
+#define GLYR_VERSION_MICRO "1"
 
 #define GLYR_VERSION_MAJOR_INT 1
 #define GLYR_VERSION_MINOR_INT 0
-#define GLYR_VERSION_MICRO_INT 0
+#define GLYR_VERSION_MICRO_INT 1
 
 /**
  * GLYR_CHECK_VERSION:

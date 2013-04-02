@@ -20,9 +20,10 @@
 #include "../../core.h"
 #include "../../stringlib.h"
 
-#define CONTENT_BEGIN "<content><![CDATA["
+#define CONTENT_BEGIN "<content>"
 #define CONTENT_ENDIN "User-contributed text"
-#define OTHER_ENDIN "]]></content>"
+#define OTHER_ENDIN "</content>"
+#define CDATA_BEGIN "<![CDATA["
 
 /* Locales that are just mapped to 'en' */
 const char * locale_map_to_en = "ca|uk|us";
@@ -59,22 +60,34 @@ static GList * ainfo_lastfm_parse (cb_object * capo)
 {
     GList * result_list = NULL;
     gchar * content_begin = strstr (capo->cache->data,CONTENT_BEGIN);
-    gchar * content_endin = strstr (capo->cache->data,CONTENT_ENDIN);
-    if (content_endin == NULL)
-    {
-        content_endin = strstr (capo->cache->data,OTHER_ENDIN);
-    }
 
-    if (content_begin && content_endin)
+    if (content_begin != NULL)
     {
-        content_begin += (sizeof CONTENT_BEGIN) - 1;
-        gchar * content = copy_value (content_begin,content_endin);
-        if (content != NULL)
+        gchar * content_endin = strstr (capo->cache->data,CONTENT_ENDIN);
+
+        if (content_endin == NULL)
         {
-            GlyrMemCache * result = DL_init();
-            result->data = content;
-            result->size = strlen (result->data);
-            result_list = g_list_prepend (result_list,result);
+            content_endin = strstr (capo->cache->data,OTHER_ENDIN);
+        }
+
+        if (content_endin != NULL)
+        {
+            content_begin += (sizeof CONTENT_BEGIN) - 1;
+
+            char * skip_cdata = strstr(content_begin, CDATA_BEGIN);
+            if (skip_cdata != NULL)
+            {
+                content_begin = skip_cdata + (sizeof CDATA_BEGIN) - 1;
+            }
+
+            gchar * content = copy_value (content_begin,content_endin);
+            if (content != NULL)
+            {
+                GlyrMemCache * result = DL_init();
+                result->data = content;
+                result->size = strlen (result->data);
+                result_list = g_list_prepend (result_list,result);
+            }
         }
     }
     return result_list;
@@ -90,7 +103,7 @@ MetaDataSource ainfo_lastfm_src =
     .type      = GLYR_GET_ARTIST_BIO,
     .parser    = ainfo_lastfm_parse,
     .get_url   = ainfo_lastfm_url,
-    .quality   = 95,
+    .quality   = 85,
     .speed     = 85,
     .endmarker = NULL,
     .lang_aware = true
