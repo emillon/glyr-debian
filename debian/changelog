@@ -2,6 +2,7 @@ glyr (1.0.1-1) unstable; urgency=low
 
   * New upstream release
     - Add copyright data for jsmn
+  * Update watch file
 
  -- Etienne Millon <etienne.millon@gmail.com>  Wed, 03 Apr 2013 00:47:50 +0200
 
