@@ -1,0 +1,25 @@
+From effb0b0099e94f83bff7458149adbffe74083561 Mon Sep 17 00:00:00 2001
+From: ok100 <ok100@openmailbox.org>
+Date: Mon, 25 Nov 2013 09:24:29 +0100
+Subject: [PATCH] Fixed lyricswiki provider
+
+---
+ lib/intern/lyrics/lyricswiki.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/intern/lyrics/lyricswiki.c b/lib/intern/lyrics/lyricswiki.c
+index 6735169..560a96a 100644
+--- a/lib/intern/lyrics/lyricswiki.c
++++ b/lib/intern/lyrics/lyricswiki.c
+@@ -64,7 +64,7 @@ static gboolean lv_cmp_content (const gchar * to_artist, const gchar * to_title,
+ /////////////////////////////////
+ 
+ #define LYR_NODE  "<div class='lyricbox'><div class='rtMatcher'><a href='http://www.ringtonematcher.com"
+-#define LYR_BEGIN "</a></div>"
++#define LYR_BEGIN "</span></div>"
+ #define LYR_ENDIN "<!--"
+ 
+ GList * parse_result_page (GlyrQuery * query, GlyrMemCache * to_parse)
+-- 
+1.8.5.1
+
