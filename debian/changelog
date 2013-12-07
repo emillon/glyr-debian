@@ -1,9 +1,9 @@
-glyr (1.0.2-1) UNRELEASED; urgency=low
+glyr (1.0.2-1) unstable; urgency=low
 
   * New upstream release (Closes: #731542)
   * Update my email address
 
- -- Etienne Millon <me@emillon.org>  Fri, 06 Dec 2013 16:46:00 +0100
+ -- Etienne Millon <me@emillon.org>  Sat, 07 Dec 2013 18:43:21 +0100
 
 glyr (1.0.1-1) unstable; urgency=low
 
