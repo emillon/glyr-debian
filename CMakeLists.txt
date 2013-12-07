@@ -38,8 +38,8 @@ ENDIF()
 # ------------------------------------------------
 SET(GLYR_VERSION_MAJOR "1")
 SET(GLYR_VERSION_MINOR "0")
-SET(GLYR_VERSION_MICRO "1")
-SET(GLYR_VERSION_NAME  "Bloody Boar")
+SET(GLYR_VERSION_MICRO "2")
+SET(GLYR_VERSION_NAME  "Raving Raven")
 # ------------------------------------------------
 
 
@@ -63,7 +63,7 @@ ENDIF()
 
 SET(COMMON_FLAGS "${GCC_ONLY_FLAGS} -Wall -Wextra -Wstrict-prototypes -W -Wno-unused-parameter -Wno-strict-prototypes -fvisibility=hidden")
 SET(CMAKE_C_FLAGS_RELEASE "${COMMON_FLAGS} ${CMAKE_C_FLAGS} -Os ${GCC_ONLY_OPT}")
-SET(CMAKE_C_FLAGS_DEBUG   "${COMMON_FLAGS} ${CMAKE_C_FLAGS} -ggdb3")
+SET(CMAKE_C_FLAGS_DEBUG   "${COMMON_FLAGS} ${CMAKE_C_FLAGS} -g3")
 SET(CMAKE_C_FLAGS "${COMMON_FLAGS} ${CMAKE_C_FLAGS}")
 # ------------------------------------------------
 
@@ -190,6 +190,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_LYRICS}/lipwalk.c"
 	"${DIR_LYRICS}/elyrics.c"
 	"${DIR_LYRICS}/chartlyrics.c"
+	"${DIR_LYRICS}/vagalume.c"
 	"${DIR_PHOTOS}/flickr.c"
 	"${DIR_PHOTOS}/lastfm.c"
 	"${DIR_PHOTOS}/google.c"
