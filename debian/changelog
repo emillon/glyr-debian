@@ -1,9 +1,9 @@
-glyr (1.0.3-1) UNRELEASED; urgency=medium
+glyr (1.0.3-1) unstable; urgency=medium
 
   * New upstream release
   * Bump Standards-Version to 3.9.5 (no changes needed)
 
- -- Etienne Millon <me@emillon.org>  Tue, 28 Jan 2014 14:20:00 +0100
+ -- Etienne Millon <me@emillon.org>  Thu, 30 Jan 2014 21:20:57 +0100
 
 glyr (1.0.2-1) unstable; urgency=low
 
