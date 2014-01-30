@@ -12,7 +12,7 @@ Build-Depends:
 Build-Depends-Indep:
  gtk-doc-tools,
  ruby (>= 4.9)
-Standards-Version: 3.9.4
+Standards-Version: 3.9.5
 Section: libs
 Homepage: http://github.com/sahib/glyr
 Vcs-Git: git://anonscm.debian.org/pkg-multimedia/glyr.git
