@@ -1,8 +1,8 @@
-glyr (1.0.5-1) UNRELEASED; urgency=medium
+glyr (1.0.5-1) unstable; urgency=medium
 
   * New upstream release
 
- -- Etienne Millon <me@emillon.org>  Tue, 11 Feb 2014 18:46:25 +0100
+ -- Etienne Millon <me@emillon.org>  Tue, 11 Feb 2014 18:53:08 +0100
 
 glyr (1.0.3-1) unstable; urgency=medium
 
