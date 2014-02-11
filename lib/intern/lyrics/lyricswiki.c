@@ -1,6 +1,6 @@
 /***********************************************************
 * This file is part of glyr
-* + a commnadline tool and library to download various sort of musicrelated metadata.
+* + a commnadline tool and library to download various sort of music related metadata.
 * + Copyright (C) [2011]  [Christopher Pahl]
 * + Hosted at: https://github.com/sahib/glyr
 *
@@ -66,6 +66,7 @@ static gboolean lv_cmp_content (const gchar * to_artist, const gchar * to_title,
 #define LYR_NODE  "<div class='lyricbox'>"
 #define LYR_BEGIN "</div>"
 #define LYR_ENDIN "<!--"
+#define LYR_INSTRUMENTAL "/Category:Instrumental"
 
 GList * parse_result_page (GlyrQuery * query, GlyrMemCache * to_parse)
 {
@@ -75,14 +76,19 @@ GList * parse_result_page (GlyrQuery * query, GlyrMemCache * to_parse)
     {
         node += (sizeof LYR_NODE);
 
+        bool is_instrumental = strstr(node, LYR_INSTRUMENTAL) != NULL;
         gchar * lyr = get_search_value (node,LYR_BEGIN,LYR_ENDIN);
         gchar * beautiness_test = beautify_string (lyr);
-        if (beautiness_test != NULL && beautiness_test[0])
+        if (is_instrumental || (beautiness_test != NULL && beautiness_test[0]))
         {
-            if (lyr != NULL && strstr (lyr,BAD_STRING) == NULL && strstr (lyr,EXTERNAL_LINKS) == NULL)
+            if (is_instrumental || (lyr != NULL && strstr (lyr,BAD_STRING) == NULL && strstr (lyr,EXTERNAL_LINKS) == NULL))
             {
                 GlyrMemCache * result = DL_init();
-                result->data = lyr;
+                if(is_instrumental) 
+                    result->data = g_strdup("Instrumental");
+                else
+                    result->data = lyr;
+
                 result->size = strlen (result->data);
                 result->dsrc = g_strdup (to_parse->dsrc);
                 result_list  = g_list_prepend (result_list,result);
