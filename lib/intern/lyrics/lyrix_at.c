@@ -1,6 +1,6 @@
 /***********************************************************
 * This file is part of glyr
-* + a commnadline tool and library to download various sort of musicrelated metadata.
+* + a commnadline tool and library to download various sort of music related metadata.
 * + Copyright (C) [2011]  [Christopher Pahl]
 * + Hosted at: https://github.com/sahib/glyr
 *
@@ -46,7 +46,7 @@ static void parse_lyrics_page (const gchar * url, GList ** result_list, cb_objec
         gchar * lyr_begin = strstr (lyrcache->data,LYRIC_BEGIN);
         if (lyr_begin != NULL)
         {
-            gchar * lyr_endin = strstr (lyr_begin,"<div>");
+            gchar * lyr_endin = strstr (lyr_begin,"</div>");
             if (lyr_endin != NULL)
             {
                 gchar * lyrics = copy_value (lyr_begin,lyr_endin);
