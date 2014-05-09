@@ -1,9 +1,9 @@
-glyr (1.0.6+git23042014-1) UNRELEASED; urgency=medium
+glyr (1.0.6+git23042014-1) unstable; urgency=medium
 
   * New upstream release
     - pick git snapshot 302c35e9 as 1.0.6 does not build
 
- -- Etienne Millon <me@emillon.org>  Fri, 09 May 2014 18:16:52 +0200
+ -- Etienne Millon <me@emillon.org>  Fri, 09 May 2014 18:22:47 +0200
 
 glyr (1.0.5-1) unstable; urgency=medium
 
