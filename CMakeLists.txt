@@ -38,10 +38,19 @@ ENDIF()
 # ------------------------------------------------
 SET(GLYR_VERSION_MAJOR "1")
 SET(GLYR_VERSION_MINOR "0")
-SET(GLYR_VERSION_MICRO "2")
+SET(GLYR_VERSION_MICRO "6")
 SET(GLYR_VERSION_NAME  "Raving Raven")
 # ------------------------------------------------
 
+exec_program(
+    "git"
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ARGS "describe"
+    OUTPUT_VARIABLE VERSION 
+)
+
+# string(REGEX MATCH "-g.*$" VERSION_SHA1 ${VERSION})
+# string(REGEX REPLACE "[-g]" "" VERSION_SHA1 ${VERSION_SHA1})
 
 # ------------------------------------------------
 # CFlags and warnlevel / build config 
