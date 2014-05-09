@@ -1,4 +1,4 @@
-glyr (1.0.6+git23042014-1) unstable; urgency=medium
+glyr (1.0.6+git20140423-1) unstable; urgency=medium
 
   * New upstream release
     - pick git snapshot 302c35e9 as 1.0.6 does not build
