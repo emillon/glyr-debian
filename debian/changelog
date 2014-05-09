@@ -1,6 +1,7 @@
 glyr (1.0.6-1) UNRELEASED; urgency=medium
 
   * New upstream release
+    - pick upstream commits to fix build
 
  -- Etienne Millon <me@emillon.org>  Fri, 09 May 2014 09:36:51 +0200
 
