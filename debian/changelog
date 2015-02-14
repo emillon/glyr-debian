@@ -1,3 +1,9 @@
+glyr (1.0.8-1~exp1) UNRELEASED; urgency=medium
+
+  * New upstream release
+
+ -- Etienne Millon <me@emillon.org>  Sat, 14 Feb 2015 21:06:45 +0100
+
 glyr (1.0.6+git20140423-1) unstable; urgency=medium
 
   * New upstream release
