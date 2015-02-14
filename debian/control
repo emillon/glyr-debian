@@ -16,7 +16,7 @@ Standards-Version: 3.9.6
 Section: libs
 Homepage: http://github.com/sahib/glyr
 Vcs-Git: git://anonscm.debian.org/pkg-multimedia/glyr.git
-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-multimedia/glyr.git
+Vcs-Browser: https://anonscm.debian.org/cgit/pkg-multimedia/glyr.git
 
 Package: libglyr1
 Architecture: any
