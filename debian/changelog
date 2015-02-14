@@ -1,10 +1,10 @@
-glyr (1.0.8-1~exp1) UNRELEASED; urgency=medium
+glyr (1.0.8-1~exp1) experimental; urgency=medium
 
   * New upstream release
   * Bump Standards-Version to 3.9.6 (no changes needed)
   * Update Vcs-Browser URL
 
- -- Etienne Millon <me@emillon.org>  Sat, 14 Feb 2015 21:06:45 +0100
+ -- Etienne Millon <me@emillon.org>  Sat, 14 Feb 2015 21:33:03 +0100
 
 glyr (1.0.6+git20140423-1) unstable; urgency=medium
 
