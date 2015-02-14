@@ -1,6 +1,7 @@
 glyr (1.0.8-1~exp1) UNRELEASED; urgency=medium
 
   * New upstream release
+  * Bump Standards-Version to 3.9.6 (no changes needed)
 
  -- Etienne Millon <me@emillon.org>  Sat, 14 Feb 2015 21:06:45 +0100
 
