@@ -1,3 +1,9 @@
+glyr (1.0.8-1) unstable; urgency=medium
+
+  * Upload to unstable.
+
+ -- Etienne Millon <me@emillon.org>  Mon, 27 Apr 2015 22:05:05 +0200
+
 glyr (1.0.8-1~exp1) experimental; urgency=medium
 
   * New upstream release
