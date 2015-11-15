@@ -2,6 +2,10 @@
 export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
 DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 
+PACKAGE_DATETIME = $(shell dpkg-parsechangelog -SDate)
+export BUILD_DATE=$(shell LC_ALL=C date -u --date="$(PACKAGE_DATETIME)" +"%b %e %Y")
+export BUILD_TIME=$(shell LC_ALL=C date -u --date="$(PACKAGE_DATETIME)" +"%H:%M:%S")
+
 %:
 	dh $@ 
 

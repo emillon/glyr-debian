@@ -1,0 +1,36 @@
+--- a/lib/glyr.c
++++ b/lib/glyr.c
+@@ -243,10 +243,17 @@
+ 
+ /////////////////////////////////
+ 
++#ifndef BUILD_DATE
++#define BUILD_DATE __DATE__
++#endif
++#ifndef BUILD_TIME
++#define BUILD_TIME __TIME__
++#endif
++
+ __attribute__ ( (visibility ("default") ) )
+ const char * glyr_version (void)
+ {
+-    return "Version "GLYR_VERSION_MAJOR"."GLYR_VERSION_MINOR"."GLYR_VERSION_MICRO" ("GLYR_VERSION_NAME") of ["__DATE__"] compiled at ["__TIME__"]";
++    return "Version "GLYR_VERSION_MAJOR"."GLYR_VERSION_MINOR"."GLYR_VERSION_MICRO" ("GLYR_VERSION_NAME") of ["BUILD_DATE"] compiled at ["BUILD_TIME"]";
+ }
+ 
+ /////////////////////////////////
+--- a/lib/CMakeLists.txt
++++ b/lib/CMakeLists.txt
+@@ -6,6 +6,12 @@
+ 
+ SET(GENERIC_LIB_VERSION ${GLYR_VERSION_MAJOR}.${GLYR_VERSION_MINOR})
+ SET(GLYR_API_SOVERSION 1)
++IF(DEFINED ENV{BUILD_DATE})
++    ADD_DEFINITIONS(-DBUILD_DATE="$ENV{BUILD_DATE}")
++ENDIF()
++IF(DEFINED ENV{BUILD_TIME})
++    ADD_DEFINITIONS(-DBUILD_TIME="$ENV{BUILD_TIME}")
++ENDIF()
+ 
+ # Link libglyr as shared library
+ ADD_LIBRARY(glyr SHARED	${LIB_SOURCE_LOCATIONS})
