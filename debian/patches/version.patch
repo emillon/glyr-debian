@@ -1,3 +1,28 @@
+From: Etienne Millon <me@emillon.org>
+Date: Sun, 15 Nov 2015 19:01:24 +0100
+Subject: [PATCH] Set correct GLYR_VERSION_MICRO
+Forwarded: https://github.com/sahib/glyr/pull/68
+
+---
+ CMakeLists.txt | 2 +-
+ lib/config.h   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f40ad5b..d6a4868 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -38,7 +38,7 @@ ENDIF()
+ # ------------------------------------------------
+ SET(GLYR_VERSION_MAJOR "1")
+ SET(GLYR_VERSION_MINOR "0")
+-SET(GLYR_VERSION_MICRO "6")
++SET(GLYR_VERSION_MICRO "8")
+ SET(GLYR_VERSION_NAME  "Raving Raven")
+ # ------------------------------------------------
+ 
+diff --git a/lib/config.h b/lib/config.h
+index c225e39..3bfa703 100644
 --- a/lib/config.h
 +++ b/lib/config.h
 @@ -12,11 +12,11 @@
@@ -14,14 +39,6 @@
  
  /**
   * GLYR_CHECK_VERSION:
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -38,7 +38,7 @@
- # ------------------------------------------------
- SET(GLYR_VERSION_MAJOR "1")
- SET(GLYR_VERSION_MINOR "0")
--SET(GLYR_VERSION_MICRO "6")
-+SET(GLYR_VERSION_MICRO "8")
- SET(GLYR_VERSION_NAME  "Raving Raven")
- # ------------------------------------------------
- 
+-- 
+2.1.4
+
