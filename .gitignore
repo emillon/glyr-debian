@@ -39,3 +39,5 @@ test/out/*
 #rmlint
 rmlint.sh
 rmlint.log
+
+.pc
