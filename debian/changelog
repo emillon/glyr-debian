@@ -1,9 +1,9 @@
-glyr (1.0.8-2) UNRELEASED; urgency=medium
+glyr (1.0.8-2) unstable; urgency=medium
 
   * Set build date from BUILD_DATE and BUILD_TIME instead of cpp macros.
   * Set correct version number e.g. in glyrc --version.
 
- -- Etienne Millon <me@emillon.org>  Sun, 15 Nov 2015 13:43:41 +0100
+ -- Etienne Millon <me@emillon.org>  Mon, 16 Nov 2015 17:41:29 +0100
 
 glyr (1.0.8-1) unstable; urgency=medium
 
