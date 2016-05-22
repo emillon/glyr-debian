@@ -1,4 +1,4 @@
-glyr (1.0.9-1) UNRELEASED; urgency=medium
+glyr (1.0.9-1) unstable; urgency=medium
 
   * New upstream release.
   * Bump Standards-Version to 3.9.8 (no changes needed).
@@ -6,7 +6,7 @@ glyr (1.0.9-1) UNRELEASED; urgency=medium
   * Fix some typos in glyrc.
   * Set hardening=+all.
 
- -- Etienne Millon <me@emillon.org>  Sun, 22 May 2016 17:12:34 +0200
+ -- Etienne Millon <me@emillon.org>  Sun, 22 May 2016 18:15:31 +0200
 
 glyr (1.0.8-2) unstable; urgency=medium
 
