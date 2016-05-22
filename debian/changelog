@@ -1,3 +1,9 @@
+glyr (1.0.9-1) UNRELEASED; urgency=medium
+
+  * New upstream release.
+
+ -- Etienne Millon <me@emillon.org>  Sun, 22 May 2016 17:12:34 +0200
+
 glyr (1.0.8-2) unstable; urgency=medium
 
   * Set build date from BUILD_DATE and BUILD_TIME instead of cpp macros.
