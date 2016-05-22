@@ -2,6 +2,7 @@ glyr (1.0.9-1) UNRELEASED; urgency=medium
 
   * New upstream release.
   * Bump Standards-Version to 3.9.8 (no changes needed).
+  * Use a secure URI for Vcs-Git.
 
  -- Etienne Millon <me@emillon.org>  Sun, 22 May 2016 17:12:34 +0200
 
